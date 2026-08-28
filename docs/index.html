@@ -50,14 +50,17 @@
     .learn-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; }
     .prompt { padding:.95rem; background:#fff8e9; border:1px solid #ead9a8; border-radius:12px; }
     .prompt strong { color:#815d0a; }
+    details { margin-top:1rem; border-top:1px solid var(--line); padding-top:.85rem; color:var(--muted); font-size:.9rem; }
+    summary { color:var(--ink); cursor:pointer; font-weight:750; }
+    .references { margin:.65rem 0 0; padding-left:1.2rem; }
     footer { border-top:1px solid var(--line); padding:1.5rem 0 2.25rem; color:var(--muted); font-size:.9rem; }
     .svg-title { font-size:20px; font-weight:800; fill:#10251f; }
     .svg-label { font-size:15px; font-weight:700; fill:#10251f; }
     .svg-small { font-size:12px; fill:#48635b; }
-    .node { stroke-width:2; }
+    .node { stroke-width:2; transform-box:fill-box; transform-origin:center; }
     .flow { fill:none; stroke:#607b70; stroke-width:3; marker-end:url(#arrow); }
     .flow-dashed { fill:none; stroke:#9b6b31; stroke-width:3; stroke-dasharray:8 6; marker-end:url(#arrow); }
-    .pulse { transition:opacity .25s ease, stroke-width .25s ease, fill .25s ease; }
+    .pulse { transition:opacity .25s ease, stroke-width .25s ease, fill .25s ease, transform .25s ease; }
     @media (max-width:850px) { .grid { grid-template-columns:1fr; } .controls { position:static; } .readouts, .learn-grid { grid-template-columns:repeat(2,1fr); } }
     @media (max-width:500px) { .wrap { width:min(100% - 1.25rem,1160px); } .readouts, .learn-grid { grid-template-columns:1fr; } h1 { letter-spacing:-.045em; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
@@ -79,7 +82,7 @@
         <h2 id="map-title">The connected metabolic map</h2>
         <svg viewBox="0 0 950 655" role="img" aria-labelledby="svgTitle svgDesc">
           <title id="svgTitle">Interactive map from glycolysis and beta oxidation into the TCA cycle and electron transport chain</title>
-          <desc id="svgDesc">Glucose flows through glycolysis to pyruvate, then lactate or acetyl CoA. Fatty acids flow through beta oxidation to acetyl CoA. The TCA cycle produces NADH and FADH2 which feed the electron transport chain. Oxygen accepts electrons and ATP synthase produces ATP. Succinate feeds complex II.</desc>
+          <desc id="svgDesc">Glucose flows through glycolysis to pyruvate, which reversibly interconverts with lactate through lactate dehydrogenase. Fatty acids flow through beta oxidation to acetyl CoA. The TCA cycle produces NADH and FADH2 which feed the electron transport chain. Oxygen accepts electrons and ATP synthase produces ATP. Succinate feeds complex II.</desc>
           <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#607b70"/></marker></defs>
           <rect x="18" y="20" width="286" height="575" rx="18" fill="#f5eee0" stroke="#e5d5b0"/>
           <rect x="323" y="20" width="262" height="575" rx="18" fill="#e7f1ed" stroke="#bad6c7"/>
@@ -90,9 +93,10 @@
           <path id="glycolysisFlow" class="flow pulse" d="M155 157 L155 216"/>
           <rect id="glycolysisNode" class="node pulse" x="53" y="220" width="205" height="68" rx="12" fill="#fffdf8" stroke="#d7682b"/>
           <text x="155" y="249" text-anchor="middle" class="svg-label">Glycolysis</text><text x="155" y="271" text-anchor="middle" class="svg-small">ATP + NADH + pyruvate</text>
-          <path id="lactateFlow" class="flow-dashed pulse" d="M53 255 L32 255 L32 371 L112 371"/>
+          <path id="lactateFlow" class="flow-dashed pulse" d="M53 245 L32 245 L32 360 L112 360"/>
+          <path id="lactateReturnFlow" class="flow-dashed pulse" d="M112 387 L32 387 L32 278 L53 278"/>
           <rect id="lactateNode" class="node pulse" x="113" y="342" width="145" height="58" rx="12" fill="#fffdf8" stroke="#bd8a12"/>
-          <text x="186" y="368" text-anchor="middle" class="svg-label">Lactate</text><text x="186" y="386" text-anchor="middle" class="svg-small">regenerates NAD+</text>
+          <text x="186" y="368" text-anchor="middle" class="svg-label">Lactate</text><text x="186" y="386" text-anchor="middle" class="svg-small">⇄ pyruvate (LDH)</text>
           <path id="pyruvateFlow" class="flow pulse" d="M258 254 L347 254"/>
           <rect id="pyruvateNode" class="node pulse" x="362" y="220" width="178" height="68" rx="12" fill="#fffdf8" stroke="#147d89"/>
           <text x="451" y="249" text-anchor="middle" class="svg-label">Pyruvate</text><text x="451" y="271" text-anchor="middle" class="svg-small">→ acetyl-CoA</text>
@@ -115,17 +119,17 @@
           <text x="755" y="561" text-anchor="middle" class="svg-label">Succinate</text><text x="755" y="580" text-anchor="middle" class="svg-small">complex II input</text>
           <path id="atpFlow" class="flow pulse" d="M755 487 L755 516"/>
           <text id="atpLabel" x="755" y="520" text-anchor="middle" class="svg-label">ATP potential ↑</text>
-          <text x="43" y="630" class="svg-small">Solid arrows: principal fluxes. Dashed arrows: conditional fluxes or inputs. Opacity changes with your settings.</text>
+          <text x="43" y="630" class="svg-small">Solid arrows: principal fluxes. Dashed arrows: conditional fluxes or inputs. Bubble size and opacity change with your settings.</text>
         </svg>
       </section>
       <aside class="panel controls" aria-labelledby="controls-title">
         <h2 id="controls-title">Set the cellular conditions</h2>
-        <div class="control"><div class="label-line"><label for="glucose">Glucose availability</label><output id="glucoseOut" for="glucose">65%</output></div><input id="glucose" type="range" min="0" max="100" value="65"><p class="hint">Supports glycolysis and pyruvate supply.</p></div>
-        <div class="control"><div class="label-line"><label for="fat">Fatty acid availability</label><output id="fatOut" for="fat">55%</output></div><input id="fat" type="range" min="0" max="100" value="55"><p class="hint">Supports β-oxidation and acetyl-CoA supply.</p></div>
-        <div class="control"><div class="label-line"><label for="oxygen">Oxygen availability</label><output id="oxygenOut" for="oxygen">85%</output></div><input id="oxygen" type="range" min="0" max="100" value="85"><p class="hint">Terminal electron acceptor at complex IV.</p></div>
-        <div class="control"><div class="label-line"><label for="lactate">Lactate level</label><output id="lactateOut" for="lactate">20%</output></div><input id="lactate" type="range" min="0" max="100" value="20"><p class="hint">A marker of altered redox balance and glycolytic flux.</p></div>
-        <div class="control"><div class="label-line"><label for="succinate">Succinate level</label><output id="succinateOut" for="succinate">15%</output></div><input id="succinate" type="range" min="0" max="100" value="15"><p class="hint">Can accumulate during ischaemia and drive electron flow on reperfusion.</p></div>
-        <div class="scenarios"><strong>Starting scenarios</strong><div class="scenario-buttons"><button type="button" data-scenario="steady">Steady aerobic</button><button type="button" data-scenario="ischaemia">Ischaemia</button><button type="button" data-scenario="reperfusion">Early reperfusion</button></div></div>
+        <div class="control"><div class="label-line"><label for="glucose">Glucose</label><output id="glucoseOut" for="glucose">5.2 mmol/L</output></div><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2"><p class="hint">Blood glucose: typical fasting range ~3.9–5.5 mmol/L; diabetes diagnostic threshold ≥7.0 mmol/L fasting.</p></div>
+        <div class="control"><div class="label-line"><label for="fat">Non esterified fatty acids</label><output id="fatOut" for="fat">0.35 mmol/L</output></div><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35"><p class="hint">Circulating NEFA: commonly ~0.1–0.6 mmol/L, with higher values in fasting or insulin resistance.</p></div>
+        <div class="control"><div class="label-line"><label for="oxygen">Tissue oxygen tension</label><output id="oxygenOut" for="oxygen">40 mmHg</output></div><input id="oxygen" type="range" min="0" max="60" step="1" value="40"><p class="hint">A tissue pO₂ proxy: hypoxia may be &lt;10 mmHg; values vary substantially among tissues.</p></div>
+        <div class="control"><div class="label-line"><label for="lactate">Blood lactate</label><output id="lactateOut" for="lactate">1.0 mmol/L</output></div><input id="lactate" type="range" min="0" max="12" step="0.1" value="1"><p class="hint">Typical resting range ~0.5–2 mmol/L; &gt;4 mmol/L is clinically raised.</p></div>
+        <div class="control"><div class="label-line"><label for="succinate">Intracellular succinate</label><output id="succinateOut" for="succinate">1.0× baseline</output></div><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1"><p class="hint">Relative intracellular pool: 1× is baseline. Ischaemia can cause marked accumulation; it is not a plasma concentration.</p></div>
+        <div class="scenarios"><strong>Starting scenarios</strong><div class="scenario-buttons"><button type="button" data-scenario="steady">Steady aerobic</button><button type="button" data-scenario="ischaemia">Ischaemia</button><button type="button" data-scenario="reperfusion">Early reperfusion</button><button type="button" data-scenario="diabetes">DKA teaching pattern</button></div></div>
       </aside>
     </div>
     <section class="panel interpretation" aria-labelledby="readout-title">
@@ -144,18 +148,42 @@
         <div class="prompt"><strong>1. Hypoxia</strong><br>Keep glucose constant and lower O₂. Which ATP source becomes relatively more important, and why does lactate rise?</div>
         <div class="prompt"><strong>2. Fuel choice</strong><br>Under plentiful O₂, increase fatty acids while lowering glucose. Which pathway supplies acetyl-CoA now?</div>
         <div class="prompt"><strong>3. Reperfusion</strong><br>Start with high succinate and low O₂, then restore O₂. Why can electron flow and ROS risk rise together early in reperfusion?</div>
+        <div class="prompt"><strong>4. Diabetes</strong><br>Choose the DKA teaching pattern. Which elements are represented here, and which crucial features, such as insulin deficiency and β-hydroxybutyrate, are not?</div>
       </div>
+      <details>
+        <summary>Teaching notes and selected references</summary>
+        <p>The DKA teaching pattern adapts the severe or uncontrolled diabetes profile used in BIOSCI358 Lab 3. It is a deliberately simplified prompt, not a diagnosis or a representation of an individual patient. The lab profile distinguishes DKA from uncontrolled type 2 diabetes or hyperosmolar hyperglycaemic state; this page does not model insulin signalling, renal glucose handling, ketogenesis or acid base balance.</p>
+        <ul class="references"><li>Kitabchi AE et al. (2009). Hyperglycemic crises in adult patients with diabetes. <em>Diabetes Care</em> 32, 1335–1343.</li><li>Laffel L (1999). Ketone bodies: a review of physiology, pathophysiology and application of monitoring to diabetes. <em>Diabetes/Metabolism Research and Reviews</em> 15, 412–426.</li><li>Pasquel FJ &amp; Umpierrez GE (2014). Hyperosmolar hyperglycemic state. <em>Diabetes Care</em> 37, 3124–3131.</li><li>Ceriello A (2000). Oxidative stress and glycemic regulation. <em>Diabetes</em> 49, 1423–1443.</li></ul>
+      </details>
     </section>
   </main>
   <footer><div class="wrap">Built as an open teaching demo. <a href="https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-biomedical-science.html">Stage 1 Biomedical Science context</a> · Qualitative educational model only.</div></footer>
   <script>
     const ids = ['glucose','fat','oxygen','lactate','succinate'];
     const sliders = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
-    const value = id => Number(sliders[id].value) / 100;
+    const normalised = {
+      glucose: n => n / 10,
+      fat: n => n / .75,
+      oxygen: n => n / 40,
+      lactate: n => n / 4,
+      succinate: n => (n - .2) / 2
+    };
+    const value = id => Math.max(0, Math.min(1, normalised[id](Number(sliders[id].value))));
     const word = (n, low=.33, high=.67) => n < low ? 'Low' : n < high ? 'Moderate' : 'High';
     const opacity = (id, amount, minimum=.18) => document.getElementById(id).style.opacity = Math.max(minimum, Math.min(1, amount)).toFixed(2);
+    const bubble = (id, amount) => {
+      const element = document.getElementById(id);
+      const size = .88 + Math.max(0, Math.min(1, amount)) * .18;
+      element.style.transform = `scale(${size.toFixed(2)})`;
+      element.style.strokeWidth = (1.6 + Math.max(0, Math.min(1, amount)) * 2.4).toFixed(1);
+    };
+    const outputText = (id, n) => {
+      if (id === 'glucose' || id === 'fat' || id === 'lactate') return `${n.toFixed(id === 'fat' ? 2 : 1)} mmol/L`;
+      if (id === 'oxygen') return `${n.toFixed(0)} mmHg`;
+      return `${n.toFixed(1)}× baseline`;
+    };
     function update() {
-      ids.forEach(id => document.getElementById(id + 'Out').value = sliders[id].value + '%');
+      ids.forEach(id => document.getElementById(id + 'Out').textContent = outputText(id, Number(sliders[id].value)));
       const glucose = value('glucose'), fat = value('fat'), oxygen = value('oxygen'), lactate = value('lactate'), succinate = value('succinate');
       const glycolysis = glucose * (0.55 + (1 - oxygen) * .45);
       const beta = fat * oxygen;
@@ -172,20 +200,27 @@
       document.getElementById('rosOut').textContent = word(ros, .22, .50);
       const isReperfusion = oxygen > .55 && succinate > .55;
       const isHypoxic = oxygen < .35;
+      const isDiabetic = Number(sliders.glucose.value) >= 10 && Number(sliders.fat.value) >= .65 && oxygen >= .35;
       let story;
       if (isReperfusion) story = 'Early reperfusion pattern: oxygen is available again while succinate remains high. Electron entry through complex II increases sharply; this can support ATP recovery but also raises the conceptual risk of reactive oxygen species during the transition.';
       else if (isHypoxic) story = 'Hypoxic or ischaemic pattern: oxygen limits complex IV, so electron transport and oxidative ATP production fall. Glycolysis becomes relatively more important, and pyruvate is more likely to be diverted toward lactate to help regenerate NAD⁺.';
+      else if (isDiabetic) story = 'Diabetes or DKA teaching pattern: hyperglycaemia and elevated circulating NEFA increase fuel supply, while insulin deficiency or resistance disrupts cellular uptake and fuel selection. This simplified model does not represent insulin signalling, β-hydroxybutyrate, ketogenesis, glycosuria, acid base balance, or complications.';
       else if (fat > glucose + .25) story = 'Fat-supported aerobic pattern: β-oxidation provides acetyl-CoA and reducing equivalents, but its use depends strongly on oxygen because the electron transport chain must re-oxidise NADH and FADH₂.';
       else story = 'Aerobic mixed-fuel pattern: glycolysis and β-oxidation feed acetyl-CoA into the TCA cycle. NADH and FADH₂ pass electrons through the electron transport chain to oxygen, supporting the proton gradient and ATP synthesis.';
       document.getElementById('story').textContent = story;
-      opacity('glucoseNode', glucose); opacity('glycolysisNode', glycolysis); opacity('glycolysisFlow', glycolysis);
-      opacity('fatNode', fat); opacity('betaNode', beta); opacity('betaFlow', beta); opacity('pyruvateNode', glucose * oxygen + .18); opacity('pyruvateFlow', glucose);
-      opacity('lactateNode', lactateTendency); opacity('lactateFlow', lactateTendency); opacity('tcaNode', substrate * oxygen + .18);
-      opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('succinateNode', succinate); opacity('succinateFlow', succinate);
+      opacity('glucoseNode', glucose); bubble('glucoseNode', glucose); opacity('glycolysisNode', glycolysis); bubble('glycolysisNode', glycolysis); opacity('glycolysisFlow', glycolysis);
+      opacity('fatNode', fat); bubble('fatNode', fat); opacity('betaNode', beta); bubble('betaNode', beta); opacity('betaFlow', beta); opacity('pyruvateNode', glucose * oxygen + .18); bubble('pyruvateNode', glucose * oxygen + .18); opacity('pyruvateFlow', glucose);
+      opacity('lactateNode', lactateTendency); bubble('lactateNode', lactateTendency); opacity('lactateFlow', lactateTendency); opacity('lactateReturnFlow', lactateTendency * .7); opacity('tcaNode', substrate * oxygen + .18); bubble('tcaNode', substrate * oxygen + .18);
+      opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); bubble('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('succinateNode', succinate); bubble('succinateNode', succinate); opacity('succinateFlow', succinate);
       opacity('atpFlow', atp); document.getElementById('atpLabel').textContent = 'ATP potential ' + (atp > .67 ? '↑' : atp < .35 ? '↓' : '↔');
       document.getElementById('etcNode').style.stroke = ros > .5 ? '#b8423e' : '#3f6f9f';
     }
-    const scenarios = { steady:{glucose:65,fat:55,oxygen:85,lactate:20,succinate:15}, ischaemia:{glucose:55,fat:40,oxygen:12,lactate:78,succinate:82}, reperfusion:{glucose:55,fat:40,oxygen:88,lactate:62,succinate:78} };
+    const scenarios = {
+      steady:{glucose:5.2,fat:.35,oxygen:40,lactate:1,succinate:1},
+      ischaemia:{glucose:5.2,fat:.70,oxygen:3,lactate:7,succinate:6},
+      reperfusion:{glucose:7,fat:.90,oxygen:40,lactate:4.5,succinate:6},
+      diabetes:{glucose:20,fat:1.10,oxygen:35,lactate:3,succinate:1.2}
+    };
     ids.forEach(id => sliders[id].addEventListener('input', update));
     document.querySelectorAll('[data-scenario]').forEach(button => button.addEventListener('click', () => { Object.entries(scenarios[button.dataset.scenario]).forEach(([id, n]) => sliders[id].value = n); update(); }));
     update();
