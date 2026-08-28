@@ -41,7 +41,7 @@
     button { cursor:pointer; border:1px solid #abb8e8; border-radius:999px; padding:.5rem .75rem; background:white; color:var(--navy); font:inherit; font-weight:750; transition:background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease; }
     button:hover { background:var(--royal); border-color:var(--royal); color:white; transform:translateY(-1px); }
     .interpretation { margin-top:1.3rem; padding:1.15rem; }
-    .readouts { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; }
+    .readouts { display:grid; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); gap:.7rem; }
     .metric { padding:.85rem; border-radius:12px; background:#eef1ff; border:1px solid #cbd2fa; }
     .metric:nth-child(2) { background:var(--soft-cyan); border-color:#bce5ef; }
     .metric:nth-child(3) { background:var(--soft-amber); border-color:#ead08a; }
@@ -74,6 +74,7 @@
     .diagram #fatNode, .diagram #betaNode { stroke:var(--blue); }
     .diagram #pyruvateNode, .diagram #tcaNode { stroke:#007b9e; }
     .diagram #etcNode { stroke:var(--royal); }
+    .diagram #atpNode { stroke:var(--royal); fill:#f1f3ff; }
     .diagram #lactateNode, .diagram #succinateNode { stroke:var(--gold); }
     .diagram #rosNode { stroke:var(--red); fill:var(--soft-red); }
     @media (max-width:1000px) { .controls-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .learn-grid { grid-template-columns:repeat(2,1fr); } }
@@ -126,6 +127,9 @@
           <ellipse id="tcaNode" class="node pulse" cx="451" cy="374" rx="102" ry="45" fill="#fffdf8" stroke="#147d89"/>
           <text x="451" y="370" text-anchor="middle" class="svg-label">TCA cycle</text><text x="451" y="391" text-anchor="middle" class="svg-small">NADH + FADH₂</text>
           <path id="electronFlow" class="flow pulse" d="M553 374 L630 374"/>
+          <path id="atpFlow" class="flow pulse" d="M755 257 L755 197"/>
+          <ellipse id="atpNode" class="node pulse" cx="755" cy="160" rx="76" ry="32" fill="#fffdf8" stroke="#1f2bd4"/>
+          <text id="atpLabel" x="755" y="166" text-anchor="middle" class="svg-label">ATP output</text>
           <rect id="etcNode" class="node pulse" x="644" y="257" width="222" height="230" rx="18" fill="#fffdf8" stroke="#3f6f9f"/>
           <text x="755" y="292" text-anchor="middle" class="svg-label">Electron transport chain</text>
           <text x="677" y="330" class="svg-small">NADH → I</text><text x="677" y="366" class="svg-small">FADH₂ / succinate → II</text><text x="677" y="402" class="svg-small">→ III → IV → O₂</text><text x="677" y="438" class="svg-small">H⁺ gradient drives ATP synthase</text>
@@ -138,9 +142,7 @@
           <path id="succinateFlow" class="flow-dashed pulse" d="M755 536 L755 487"/>
           <rect id="succinateNode" class="node pulse" x="674" y="536" width="162" height="58" rx="12" fill="#fffdf8" stroke="#bd8a12"/>
           <text x="755" y="561" text-anchor="middle" class="svg-label">Succinate</text><text x="755" y="580" text-anchor="middle" class="svg-small">complex II input</text>
-          <path id="atpFlow" class="flow pulse" d="M755 487 L755 516"/>
-          <text id="atpLabel" x="755" y="520" text-anchor="middle" class="svg-label">ATP potential ↑</text>
-          <text x="43" y="630" class="svg-small">Solid arrows: principal fluxes. Dashed arrows: conditional fluxes or inputs. Bubble size and opacity change with your settings.</text>
+          <text x="43" y="630" class="svg-small">Teaching arithmetic: 1 glucose → 2 pyruvate; 46 H⁺ / oxidised pyruvate; 10 H⁺ / O₂; ~3 H⁺ / ATP. Outputs are conceptual pool units.</text>
         </svg>
     </section>
     <section class="panel controls" aria-labelledby="controls-title">
@@ -160,10 +162,12 @@
     <section class="panel interpretation" aria-labelledby="readout-title">
       <h2 id="readout-title">Conceptual readout</h2>
       <div class="readouts">
-        <div class="metric"><span>ATP potential</span><strong id="atpOut">High</strong></div>
-        <div class="metric"><span>Electron pressure</span><strong id="pressureOut">Moderate</strong></div>
-        <div class="metric"><span>LDH-linked Δpyruvate</span><strong id="lactateTrendOut">0.0 mmol/L</strong></div>
-        <div class="metric"><span>ROS risk</span><strong id="rosOut">Low</strong></div>
+        <div class="metric"><span>Oxidised pyruvate units</span><strong id="substrateOut">0.0</strong></div>
+        <div class="metric"><span>Protons pumped</span><strong id="pressureOut">0 H⁺</strong></div>
+        <div class="metric"><span>O₂ used</span><strong id="oxygenDemandOut">0.0 O₂</strong></div>
+        <div class="metric"><span>P:O ratio</span><strong id="pOverOOut">3.33</strong></div>
+        <div class="metric"><span>ATP output</span><strong id="atpOut">0 ATP eq.</strong></div>
+        <div class="metric"><span>ROS / uncoupling</span><strong id="rosOut">Low</strong></div>
       </div>
       <p id="story" aria-live="polite"></p>
       <p id="rosEffects" aria-live="polite"></p>
@@ -178,6 +182,7 @@
       </div>
       <details>
         <summary>Teaching notes and selected references</summary>
+        <p><strong>Stoichiometric teaching model.</strong> The arithmetic displayed here uses 2 pyruvate per glucose, 46 pumped protons per oxidised pyruvate, 1 O₂ per 10 pumped protons, and approximately 3 protons per ATP. The fatty-acid slider contributes a relative oxidation signal because fatty-acid chain length is not specified. These are deliberately simplified teaching constants, not a universal account of mitochondrial bioenergetics. ROS reduces the modelled coupling efficiency and therefore the displayed P:O ratio and ATP output.</p>
         <p>The DKA teaching pattern adapts the severe or uncontrolled diabetes profile used in BIOSCI358 Lab 3. It is a deliberately simplified prompt, not a diagnosis or a representation of an individual patient. The lab profile distinguishes DKA from uncontrolled type 2 diabetes or hyperosmolar hyperglycaemic state; this page does not model insulin signalling, renal glucose handling, ketogenesis or acid base balance.</p>
         <ul class="references"><li>Kitabchi AE et al. (2009). Hyperglycemic crises in adult patients with diabetes. <em>Diabetes Care</em> 32, 1335–1343.</li><li>Laffel L (1999). Ketone bodies: a review of physiology, pathophysiology and application of monitoring to diabetes. <em>Diabetes/Metabolism Research and Reviews</em> 15, 412–426.</li><li>Pasquel FJ &amp; Umpierrez GE (2014). Hyperosmolar hyperglycemic state. <em>Diabetes Care</em> 37, 3124–3131.</li><li>Ceriello A (2000). Oxidative stress and glycemic regulation. <em>Diabetes</em> 49, 1423–1443.</li></ul>
       </details>
@@ -192,7 +197,7 @@
       fat: n => n / .75,
       oxygen: n => n / 40,
       lactate: n => n / 4,
-      succinate: n => (n - .2) / 2
+      succinate: n => (n - 1) / 5
     };
     const value = id => Math.max(0, Math.min(1, normalised[id](Number(sliders[id].value))));
     const word = (n, low=.33, high=.67) => n < low ? 'Low' : n < high ? 'Moderate' : 'High';
@@ -216,21 +221,31 @@
       // Teaching assumption: lactate ↔ pyruvate is represented as a 1:1 carbon-pair input.
       // Real cellular ratios also depend on NADH/NAD+ and pH.
       const lactateLinkedPyruvate = Math.max(0, lactateInput);
+      const glucosePyruvate = Number(sliders.glucose.value) * 2;
+      const fattyAcidEquivalent = (Number(sliders.fat.value) / .35) * 2;
       const glycolysis = glucose * (0.55 + (1 - oxygen) * .45);
       const beta = fat * oxygen;
       const pyruvateDrive = Math.min(1, glucose * .45 + lactateLinkedPyruvate / 12);
-      const pyruvateOxidation = pyruvateDrive * oxygen;
-      const substrate = Math.min(1, glucose * .44 + fat * .46 + pyruvateOxidation * .18);
-      const electronSupply = substrate * .65 + succinate * .55;
-      const electronThroughput = electronSupply * oxygen;
+      const substrateUnits = Math.max(0, glucosePyruvate + lactateDelta + fattyAcidEquivalent);
+      const pyruvateOxidation = substrateUnits * oxygen;
+      const substrate = Math.min(1, substrateUnits / 16);
+      const electronSupply = Math.min(1, substrate * .65 + succinate * .55);
+      const electronThroughput = Math.min(1, pyruvateOxidation / 16);
       const pressure = Math.max(0, electronSupply - electronThroughput) + succinate * oxygen * .25;
       const lactateTendency = Math.min(1, glucose * (1 - oxygen) * 1.25 + lactate * .25);
-      const atp = Math.min(1, electronThroughput * .82 + glycolysis * .18);
       const ros = Math.min(1, succinate * oxygen * .95 + pressure * .45);
-      const effectiveAtp = atp * (1 - ros * .35);
-      document.getElementById('atpOut').textContent = word(effectiveAtp, .35, .68);
-      document.getElementById('pressureOut').textContent = word(pressure, .28, .58);
-      document.getElementById('lactateTrendOut').textContent = `${lactateDelta >= 0 ? '+' : ''}${lactateDelta.toFixed(1)} mmol/L`;
+      const protonsPumped = pyruvateOxidation * 46;
+      const oxygenUsed = protonsPumped / 10;
+      const baselinePO = 10 / 3;
+      const couplingEfficiency = Math.max(.25, 1 - ros * .6);
+      const pOverO = baselinePO * couplingEfficiency;
+      const atpOutput = oxygenUsed * pOverO;
+      const effectiveAtp = Math.min(1, atpOutput / 230);
+      document.getElementById('substrateOut').textContent = pyruvateOxidation.toFixed(1);
+      document.getElementById('atpOut').textContent = `${atpOutput.toFixed(0)} ATP eq.`;
+      document.getElementById('pressureOut').textContent = `${protonsPumped.toFixed(0)} H⁺`;
+      document.getElementById('oxygenDemandOut').textContent = `${oxygenUsed.toFixed(1)} O₂`;
+      document.getElementById('pOverOOut').textContent = pOverO.toFixed(2);
       document.getElementById('rosOut').textContent = word(ros, .22, .50);
       document.getElementById('pyruvateDelta').textContent = `LDH-linked Δ ${lactateDelta >= 0 ? '+' : ''}${lactateDelta.toFixed(1)} mmol/L`;
       const isReperfusion = oxygen > .55 && succinate > .55;
@@ -244,16 +259,16 @@
       else story = 'Aerobic mixed-fuel pattern: glycolysis and β-oxidation feed acetyl-CoA into the TCA cycle. NADH and FADH₂ pass electrons through the electron transport chain to oxygen, supporting the proton gradient and ATP synthesis.';
       document.getElementById('story').textContent = story;
       const rosEffects = ros >= .5
-        ? 'High ROS signal: oxidative damage can impair TCA and electron-transport enzymes, oxidise membrane lipids, damage mitochondrial DNA and increase inflammatory or insulin-signalling stress. The model applies a conceptual ATP-efficiency penalty.'
+        ? `High ROS signal: uncoupling lowers the modelled P:O ratio to ${pOverO.toFixed(2)} and lowers ATP output despite the available substrate. Sustained ROS can also impair TCA/ETC enzymes, oxidise membrane lipids, damage mitochondrial DNA and increase inflammatory or insulin-signalling stress.`
         : ros >= .22
-          ? 'Moderate ROS signal: reactive oxygen species are normal signalling molecules at low levels, but sustained elevation can reduce metabolic efficiency through redox damage and stress signalling.'
-          : 'Low ROS signal: basal reactive oxygen species participate in signalling. This model treats the major harmful effects as emerging with sustained higher ROS rather than at basal levels.';
+          ? `Moderate ROS signal: the modelled P:O ratio is ${pOverO.toFixed(2)}. Reactive oxygen species are normal signalling molecules at low levels, but sustained elevation can reduce coupling and metabolic efficiency through redox damage and stress signalling.`
+          : `Low ROS signal: basal reactive oxygen species participate in signalling. The modelled P:O ratio remains close to ${pOverO.toFixed(2)}; major harmful effects emerge with sustained higher ROS.`;
       document.getElementById('rosEffects').textContent = rosEffects;
       opacity('glucoseNode', glucose); bubble('glucoseNode', glucose); opacity('glycolysisNode', glycolysis); bubble('glycolysisNode', glycolysis); opacity('glycolysisFlow', glycolysis);
       opacity('fatNode', fat); bubble('fatNode', fat); opacity('betaNode', beta); bubble('betaNode', beta); opacity('betaFlow', beta); opacity('pyruvateNode', pyruvateDrive); bubble('pyruvateNode', pyruvateDrive); opacity('pyruvateFlow', pyruvateOxidation);
       opacity('lactateNode', lactateTendency); bubble('lactateNode', lactateTendency); opacity('lactateFlow', lactateTendency); opacity('lactateReturnFlow', lactateTendency * .7); opacity('tcaNode', substrate * oxygen + .18); bubble('tcaNode', substrate * oxygen + .18);
       opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); bubble('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('rosFlow', ros); opacity('rosNode', ros); bubble('rosNode', ros); opacity('succinateNode', succinate); bubble('succinateNode', succinate); opacity('succinateFlow', succinate);
-      opacity('atpFlow', effectiveAtp); document.getElementById('atpLabel').textContent = 'ATP potential ' + (effectiveAtp > .67 ? '↑' : effectiveAtp < .35 ? '↓' : '↔');
+      opacity('atpFlow', effectiveAtp); opacity('atpNode', effectiveAtp); bubble('atpNode', effectiveAtp); document.getElementById('atpLabel').textContent = `${atpOutput.toFixed(0)} ATP eq.`;
       document.getElementById('etcNode').style.stroke = ros > .5 ? '#b8423e' : '#1f2bd4';
     }
     const scenarios = {
