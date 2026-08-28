@@ -46,6 +46,7 @@
     .metric span { display:block; font-size:.79rem; color:var(--muted); }
     .metric strong { display:block; margin-top:.15rem; font-size:1.16rem; letter-spacing:-.03em; }
     #story { margin:.95rem 0 0; padding:.95rem 1rem; border-left:4px solid var(--teal); background:#f0f6f3; }
+    #rosEffects { margin:.75rem 0 0; padding:.8rem 1rem; border-left:4px solid var(--red); background:#fff2f0; color:#6f2927; }
     .learn { margin-top:1.3rem; padding:1.15rem; }
     .learn-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; }
     .prompt { padding:.95rem; background:#fff8e9; border:1px solid #ead9a8; border-radius:12px; }
@@ -60,6 +61,7 @@
     .node { stroke-width:2; transform-box:fill-box; transform-origin:center; }
     .flow { fill:none; stroke:#607b70; stroke-width:3; marker-end:url(#arrow); }
     .flow-dashed { fill:none; stroke:#9b6b31; stroke-width:3; stroke-dasharray:8 6; marker-end:url(#arrow); }
+    #rosFlow { stroke:var(--red); }
     .pulse { transition:opacity .25s ease, stroke-width .25s ease, fill .25s ease, transform .25s ease; }
     @media (max-width:850px) { .grid { grid-template-columns:1fr; } .controls { position:static; } .readouts, .learn-grid { grid-template-columns:repeat(2,1fr); } }
     @media (max-width:500px) { .wrap { width:min(100% - 1.25rem,1160px); } .readouts, .learn-grid { grid-template-columns:1fr; } h1 { letter-spacing:-.045em; } }
@@ -82,7 +84,7 @@
         <h2 id="map-title">The connected metabolic map</h2>
         <svg viewBox="0 0 950 655" role="img" aria-labelledby="svgTitle svgDesc">
           <title id="svgTitle">Interactive map from glycolysis and beta oxidation into the TCA cycle and electron transport chain</title>
-          <desc id="svgDesc">Glucose flows through glycolysis to pyruvate, which reversibly interconverts with lactate through lactate dehydrogenase. Fatty acids flow through beta oxidation to acetyl CoA. The TCA cycle produces NADH and FADH2 which feed the electron transport chain. Oxygen accepts electrons and ATP synthase produces ATP. Succinate feeds complex II.</desc>
+          <desc id="svgDesc">Glucose flows through glycolysis to pyruvate, which reversibly interconverts with lactate through lactate dehydrogenase. Fatty acids flow through beta oxidation to acetyl CoA. The TCA cycle produces NADH and FADH2 which feed the electron transport chain. Oxygen accepts electrons and ATP synthase produces ATP. Succinate feeds complex II. Electron leak can form reactive oxygen species which can damage metabolic machinery.</desc>
           <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#607b70"/></marker></defs>
           <rect x="18" y="20" width="286" height="575" rx="18" fill="#f5eee0" stroke="#e5d5b0"/>
           <rect x="323" y="20" width="262" height="575" rx="18" fill="#e7f1ed" stroke="#bad6c7"/>
@@ -99,7 +101,7 @@
           <text x="186" y="368" text-anchor="middle" class="svg-label">Lactate</text><text x="186" y="386" text-anchor="middle" class="svg-small">⇄ pyruvate (LDH)</text>
           <path id="pyruvateFlow" class="flow pulse" d="M258 254 L347 254"/>
           <rect id="pyruvateNode" class="node pulse" x="362" y="220" width="178" height="68" rx="12" fill="#fffdf8" stroke="#147d89"/>
-          <text x="451" y="249" text-anchor="middle" class="svg-label">Pyruvate</text><text x="451" y="271" text-anchor="middle" class="svg-small">→ acetyl-CoA</text>
+          <text x="451" y="249" text-anchor="middle" class="svg-label">Pyruvate</text><text id="pyruvateDelta" x="451" y="271" text-anchor="middle" class="svg-small">LDH-linked Δ 0.0 mmol/L</text>
           <rect id="fatNode" class="node pulse" x="53" y="455" width="205" height="58" rx="12" fill="#fffdf8" stroke="#0e735a"/>
           <text x="155" y="481" text-anchor="middle" class="svg-label">Fatty acids</text><text x="155" y="499" text-anchor="middle" class="svg-small">substrate intake</text>
           <path id="betaFlow" class="flow pulse" d="M258 484 L347 484"/>
@@ -114,6 +116,10 @@
           <text x="677" y="330" class="svg-small">NADH → I</text><text x="677" y="366" class="svg-small">FADH₂ / succinate → II</text><text x="677" y="402" class="svg-small">→ III → IV → O₂</text><text x="677" y="438" class="svg-small">H⁺ gradient drives ATP synthase</text>
           <path id="oxygenFlow" class="flow pulse" d="M866 329 L912 329"/>
           <text x="882" y="305" class="svg-label">O₂</text><text x="880" y="350" class="svg-small">→ H₂O</text>
+          <path id="rosFlow" class="flow-dashed pulse" d="M866 430 L872 430"/>
+          <rect id="rosNode" class="node pulse" x="873" y="397" width="51" height="64" rx="10" fill="#fff6f4" stroke="#b8423e"/>
+          <text x="898" y="425" text-anchor="middle" class="svg-label" fill="#b8423e">ROS</text><text x="898" y="444" text-anchor="middle" class="svg-small">damage</text>
+          <text x="875" y="479" class="svg-small">lipids · enzymes · DNA</text>
           <path id="succinateFlow" class="flow-dashed pulse" d="M755 536 L755 487"/>
           <rect id="succinateNode" class="node pulse" x="674" y="536" width="162" height="58" rx="12" fill="#fffdf8" stroke="#bd8a12"/>
           <text x="755" y="561" text-anchor="middle" class="svg-label">Succinate</text><text x="755" y="580" text-anchor="middle" class="svg-small">complex II input</text>
@@ -127,7 +133,7 @@
         <div class="control"><div class="label-line"><label for="glucose">Glucose</label><output id="glucoseOut" for="glucose">5.2 mmol/L</output></div><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2"><p class="hint">Blood glucose: typical fasting range ~3.9–5.5 mmol/L; diabetes diagnostic threshold ≥7.0 mmol/L fasting.</p></div>
         <div class="control"><div class="label-line"><label for="fat">Non esterified fatty acids</label><output id="fatOut" for="fat">0.35 mmol/L</output></div><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35"><p class="hint">Circulating NEFA: commonly ~0.1–0.6 mmol/L, with higher values in fasting or insulin resistance.</p></div>
         <div class="control"><div class="label-line"><label for="oxygen">Tissue oxygen tension</label><output id="oxygenOut" for="oxygen">40 mmHg</output></div><input id="oxygen" type="range" min="0" max="60" step="1" value="40"><p class="hint">A tissue pO₂ proxy: hypoxia may be &lt;10 mmHg; values vary substantially among tissues.</p></div>
-        <div class="control"><div class="label-line"><label for="lactate">Blood lactate</label><output id="lactateOut" for="lactate">1.0 mmol/L</output></div><input id="lactate" type="range" min="0" max="12" step="0.1" value="1"><p class="hint">Typical resting range ~0.5–2 mmol/L; &gt;4 mmol/L is clinically raised.</p></div>
+        <div class="control"><div class="label-line"><label for="lactate">Blood lactate</label><output id="lactateOut" for="lactate">1.0 mmol/L</output></div><input id="lactate" type="range" min="0" max="12" step="0.1" value="1"><p class="hint">Typical resting range ~0.5–2 mmol/L; &gt;4 mmol/L is clinically raised. In this model, every 1 mmol/L lactate change produces the same Δpyruvate input through LDH.</p></div>
         <div class="control"><div class="label-line"><label for="succinate">Intracellular succinate</label><output id="succinateOut" for="succinate">1.0× baseline</output></div><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1"><p class="hint">Relative intracellular pool: 1× is baseline. Ischaemia can cause marked accumulation; it is not a plasma concentration.</p></div>
         <div class="scenarios"><strong>Starting scenarios</strong><div class="scenario-buttons"><button type="button" data-scenario="steady">Steady aerobic</button><button type="button" data-scenario="ischaemia">Ischaemia</button><button type="button" data-scenario="reperfusion">Early reperfusion</button><button type="button" data-scenario="diabetes">DKA teaching pattern</button></div></div>
       </aside>
@@ -137,10 +143,11 @@
       <div class="readouts">
         <div class="metric"><span>ATP potential</span><strong id="atpOut">High</strong></div>
         <div class="metric"><span>Electron pressure</span><strong id="pressureOut">Moderate</strong></div>
-        <div class="metric"><span>Lactate tendency</span><strong id="lactateTrendOut">Low</strong></div>
+        <div class="metric"><span>LDH-linked Δpyruvate</span><strong id="lactateTrendOut">0.0 mmol/L</strong></div>
         <div class="metric"><span>ROS risk</span><strong id="rosOut">Low</strong></div>
       </div>
       <p id="story" aria-live="polite"></p>
+      <p id="rosEffects" aria-live="polite"></p>
     </section>
     <section class="panel learn" aria-labelledby="prompts-title">
       <h2 id="prompts-title">Try these predictions before moving the sliders</h2>
@@ -185,19 +192,28 @@
     function update() {
       ids.forEach(id => document.getElementById(id + 'Out').textContent = outputText(id, Number(sliders[id].value)));
       const glucose = value('glucose'), fat = value('fat'), oxygen = value('oxygen'), lactate = value('lactate'), succinate = value('succinate');
+      const lactateInput = Number(sliders.lactate.value);
+      const lactateDelta = lactateInput - 1;
+      // Teaching assumption: lactate ↔ pyruvate is represented as a 1:1 carbon-pair input.
+      // Real cellular ratios also depend on NADH/NAD+ and pH.
+      const lactateLinkedPyruvate = Math.max(0, lactateInput);
       const glycolysis = glucose * (0.55 + (1 - oxygen) * .45);
       const beta = fat * oxygen;
-      const substrate = glucose * .54 + fat * .46;
+      const pyruvateDrive = Math.min(1, glucose * .45 + lactateLinkedPyruvate / 12);
+      const pyruvateOxidation = pyruvateDrive * oxygen;
+      const substrate = Math.min(1, glucose * .44 + fat * .46 + pyruvateOxidation * .18);
       const electronSupply = substrate * .65 + succinate * .55;
       const electronThroughput = electronSupply * oxygen;
       const pressure = Math.max(0, electronSupply - electronThroughput) + succinate * oxygen * .25;
       const lactateTendency = Math.min(1, glucose * (1 - oxygen) * 1.25 + lactate * .25);
       const atp = Math.min(1, electronThroughput * .82 + glycolysis * .18);
       const ros = Math.min(1, succinate * oxygen * .95 + pressure * .45);
-      document.getElementById('atpOut').textContent = word(atp, .35, .68);
+      const effectiveAtp = atp * (1 - ros * .35);
+      document.getElementById('atpOut').textContent = word(effectiveAtp, .35, .68);
       document.getElementById('pressureOut').textContent = word(pressure, .28, .58);
-      document.getElementById('lactateTrendOut').textContent = word(lactateTendency, .28, .58);
+      document.getElementById('lactateTrendOut').textContent = `${lactateDelta >= 0 ? '+' : ''}${lactateDelta.toFixed(1)} mmol/L`;
       document.getElementById('rosOut').textContent = word(ros, .22, .50);
+      document.getElementById('pyruvateDelta').textContent = `LDH-linked Δ ${lactateDelta >= 0 ? '+' : ''}${lactateDelta.toFixed(1)} mmol/L`;
       const isReperfusion = oxygen > .55 && succinate > .55;
       const isHypoxic = oxygen < .35;
       const isDiabetic = Number(sliders.glucose.value) >= 10 && Number(sliders.fat.value) >= .65 && oxygen >= .35;
@@ -208,11 +224,17 @@
       else if (fat > glucose + .25) story = 'Fat-supported aerobic pattern: β-oxidation provides acetyl-CoA and reducing equivalents, but its use depends strongly on oxygen because the electron transport chain must re-oxidise NADH and FADH₂.';
       else story = 'Aerobic mixed-fuel pattern: glycolysis and β-oxidation feed acetyl-CoA into the TCA cycle. NADH and FADH₂ pass electrons through the electron transport chain to oxygen, supporting the proton gradient and ATP synthesis.';
       document.getElementById('story').textContent = story;
+      const rosEffects = ros >= .5
+        ? 'High ROS signal: oxidative damage can impair TCA and electron-transport enzymes, oxidise membrane lipids, damage mitochondrial DNA and increase inflammatory or insulin-signalling stress. The model applies a conceptual ATP-efficiency penalty.'
+        : ros >= .22
+          ? 'Moderate ROS signal: reactive oxygen species are normal signalling molecules at low levels, but sustained elevation can reduce metabolic efficiency through redox damage and stress signalling.'
+          : 'Low ROS signal: basal reactive oxygen species participate in signalling. This model treats the major harmful effects as emerging with sustained higher ROS rather than at basal levels.';
+      document.getElementById('rosEffects').textContent = rosEffects;
       opacity('glucoseNode', glucose); bubble('glucoseNode', glucose); opacity('glycolysisNode', glycolysis); bubble('glycolysisNode', glycolysis); opacity('glycolysisFlow', glycolysis);
-      opacity('fatNode', fat); bubble('fatNode', fat); opacity('betaNode', beta); bubble('betaNode', beta); opacity('betaFlow', beta); opacity('pyruvateNode', glucose * oxygen + .18); bubble('pyruvateNode', glucose * oxygen + .18); opacity('pyruvateFlow', glucose);
+      opacity('fatNode', fat); bubble('fatNode', fat); opacity('betaNode', beta); bubble('betaNode', beta); opacity('betaFlow', beta); opacity('pyruvateNode', pyruvateDrive); bubble('pyruvateNode', pyruvateDrive); opacity('pyruvateFlow', pyruvateOxidation);
       opacity('lactateNode', lactateTendency); bubble('lactateNode', lactateTendency); opacity('lactateFlow', lactateTendency); opacity('lactateReturnFlow', lactateTendency * .7); opacity('tcaNode', substrate * oxygen + .18); bubble('tcaNode', substrate * oxygen + .18);
-      opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); bubble('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('succinateNode', succinate); bubble('succinateNode', succinate); opacity('succinateFlow', succinate);
-      opacity('atpFlow', atp); document.getElementById('atpLabel').textContent = 'ATP potential ' + (atp > .67 ? '↑' : atp < .35 ? '↓' : '↔');
+      opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); bubble('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('rosFlow', ros); opacity('rosNode', ros); bubble('rosNode', ros); opacity('succinateNode', succinate); bubble('succinateNode', succinate); opacity('succinateFlow', succinate);
+      opacity('atpFlow', effectiveAtp); document.getElementById('atpLabel').textContent = 'ATP potential ' + (effectiveAtp > .67 ? '↑' : effectiveAtp < .35 ? '↓' : '↔');
       document.getElementById('etcNode').style.stroke = ros > .5 ? '#b8423e' : '#3f6f9f';
     }
     const scenarios = {
