@@ -12,6 +12,8 @@ It is deliberately a **conceptual, qualitative model**, not a clinical tool or a
 
 Open the published page and move the sliders, or use a starting scenario. Students can record a prediction before changing a variable, then explain the observed direction of change using the pathway diagram.
 
+The linked [case challenge](docs/challenge.html) asks students to calculate glucose from an absorbance standard curve, select the necessary metabolic assays, calculate the same modelled ATP output, and assign a teaching phenotype.
+
 ## Local preview
 
 Open `docs/index.html` in a modern browser. No build step or external dependency is required.
