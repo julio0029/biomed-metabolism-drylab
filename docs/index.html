@@ -77,8 +77,29 @@
     .diagram #atpNode { stroke:var(--royal); fill:#f1f3ff; }
     .diagram #lactateNode, .diagram #succinateNode { stroke:var(--gold); }
     .diagram #rosNode { stroke:var(--red); fill:var(--soft-red); }
+    .map-control { height:100%; display:flex; flex-direction:column; gap:2px; padding:4px 7px 3px; border:1px solid #c7d0f5; border-radius:9px; background:rgba(255,255,255,.94); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 3px 9px rgba(12,12,72,.09); }
+    .map-control label { display:flex; justify-content:space-between; align-items:center; gap:4px; font-size:10px; line-height:1.1; font-weight:800; }
+    .map-control output { font-size:9px; color:var(--royal); }
+    .map-control input[type=range] { width:100%; height:15px; min-height:0; margin:0; accent-color:var(--royal); cursor:pointer; }
+    .map-control .map-hint { color:var(--muted); font-size:8px; line-height:1; }
+    #atpHalo { fill:#43ddff; opacity:0; transform-box:fill-box; transform-origin:center; pointer-events:none; }
+    #rosSparks { opacity:0; pointer-events:none; }
+    .ros-spark { fill:#ffca55; stroke:#b4233a; stroke-width:1.5; transform-box:fill-box; transform-origin:center; }
+    .atp-active #atpHalo { opacity:calc(.08 + var(--atp-intensity, .2) * .5); animation:atp-luciferase var(--atp-speed,2.3s) ease-in-out infinite; }
+    .atp-active #atpNode { filter:drop-shadow(0 0 calc(2px + var(--atp-intensity, .2) * 8px) rgba(0,202,239,.9)); }
+    .atp-active #atpFlow { stroke:#00aede; stroke-dasharray:7 5; animation:atp-flow var(--atp-speed,2.3s) linear infinite; }
+    .ros-active #rosSparks { opacity:var(--ros-intensity, .25); }
+    .ros-active .ros-spark { animation:ros-firework var(--ros-speed,1.35s) ease-out infinite; }
+    .ros-active .ros-spark:nth-child(2) { animation-delay:.18s; }
+    .ros-active .ros-spark:nth-child(3) { animation-delay:.36s; }
+    .ros-active .ros-spark:nth-child(4) { animation-delay:.54s; }
+    .ros-active .ros-spark:nth-child(5) { animation-delay:.72s; }
+    .ros-active .ros-spark:nth-child(6) { animation-delay:.9s; }
+    @keyframes atp-luciferase { 0%,100% { transform:scale(.92); opacity:calc(.05 + var(--atp-intensity, .2) * .32); } 50% { transform:scale(1.13); opacity:calc(.14 + var(--atp-intensity, .2) * .66); } }
+    @keyframes atp-flow { to { stroke-dashoffset:-24; } }
+    @keyframes ros-firework { 0% { transform:scale(.45) rotate(0deg); opacity:.15; } 45% { transform:scale(1.15) rotate(18deg); opacity:1; } 100% { transform:scale(1.55) rotate(35deg); opacity:0; } }
     @media (max-width:1000px) { .controls-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .learn-grid { grid-template-columns:repeat(2,1fr); } }
-    @media (max-width:650px) { .wrap { width:min(100% - 1.25rem,1440px); } .section-heading, .controls-header { align-items:flex-start; flex-direction:column; gap:.25rem; } .controls-grid, .readouts, .learn-grid { grid-template-columns:1fr; } h1 { letter-spacing:-.05em; } }
+    @media (max-width:650px) { .wrap { width:min(100% - 1.25rem,1440px); } .section-heading, .controls-header { align-items:flex-start; flex-direction:column; gap:.25rem; } .controls-grid, .readouts, .learn-grid { grid-template-columns:1fr; } .diagram { overflow-x:auto; overflow-y:hidden; } .diagram svg { width:950px; min-width:950px; } .section-heading p::after { content:' Swipe sideways to explore the full interactive map.'; } h1 { letter-spacing:-.05em; } }
     @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }
   </style>
 </head>
@@ -96,7 +117,7 @@
     <section class="panel diagram" aria-labelledby="map-title">
       <div class="section-heading">
         <h2 id="map-title">The connected metabolic map</h2>
-        <p>Adjust conditions below to update pathway emphasis.</p>
+        <p>Adjust each condition directly beside its pathway input.</p>
       </div>
         <svg viewBox="0 0 950 655" role="img" aria-labelledby="svgTitle svgDesc">
           <title id="svgTitle">Interactive map from glycolysis and beta oxidation into the TCA cycle and electron transport chain</title>
@@ -106,6 +127,7 @@
           <rect x="323" y="20" width="262" height="575" rx="18" fill="#e7f1ed" stroke="#bad6c7"/>
           <rect x="604" y="20" width="328" height="575" rx="18" fill="#e9f2f4" stroke="#bdd8dc"/>
           <text x="43" y="57" class="svg-title">Cytosol</text><text x="347" y="57" class="svg-title">Mitochondrial matrix</text><text x="628" y="57" class="svg-title">Inner membrane</text>
+          <foreignObject x="53" y="62" width="205" height="35"><div xmlns="http://www.w3.org/1999/xhtml" class="map-control"><label for="glucose">Glucose <output id="glucoseOut" for="glucose">5.2 mmol/L</output></label><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2" aria-describedby="glucoseHint"/><span id="glucoseHint" class="map-hint">substrate supply</span></div></foreignObject>
           <rect id="glucoseNode" class="node pulse" x="53" y="99" width="205" height="58" rx="12" fill="#fffdf8" stroke="#d7682b"/>
           <text x="155" y="126" text-anchor="middle" class="svg-label">Glucose</text><text x="155" y="145" text-anchor="middle" class="svg-small">substrate intake</text>
           <path id="glycolysisFlow" class="flow pulse" d="M155 157 L155 216"/>
@@ -113,11 +135,13 @@
           <text x="155" y="249" text-anchor="middle" class="svg-label">Glycolysis</text><text x="155" y="271" text-anchor="middle" class="svg-small">ATP + NADH + pyruvate</text>
           <path id="lactateFlow" class="flow-dashed pulse" d="M53 245 L32 245 L32 360 L112 360"/>
           <path id="lactateReturnFlow" class="flow-dashed pulse" d="M112 387 L32 387 L32 278 L53 278"/>
+          <foreignObject x="53" y="299" width="205" height="38"><div xmlns="http://www.w3.org/1999/xhtml" class="map-control"><label for="lactate">Lactate <output id="lactateOut" for="lactate">1.0 mmol/L</output></label><input id="lactate" type="range" min="0" max="12" step="0.1" value="1" aria-describedby="lactateHint"/><span id="lactateHint" class="map-hint">LDH-linked input</span></div></foreignObject>
           <rect id="lactateNode" class="node pulse" x="113" y="342" width="145" height="58" rx="12" fill="#fffdf8" stroke="#bd8a12"/>
           <text x="186" y="368" text-anchor="middle" class="svg-label">Lactate</text><text x="186" y="386" text-anchor="middle" class="svg-small">⇄ pyruvate (LDH)</text>
           <path id="pyruvateFlow" class="flow pulse" d="M258 254 L347 254"/>
           <rect id="pyruvateNode" class="node pulse" x="362" y="220" width="178" height="68" rx="12" fill="#fffdf8" stroke="#147d89"/>
           <text x="451" y="249" text-anchor="middle" class="svg-label">Pyruvate</text><text id="pyruvateDelta" x="451" y="271" text-anchor="middle" class="svg-small">LDH-linked Δ 0.0 mmol/L</text>
+          <foreignObject x="53" y="412" width="205" height="38"><div xmlns="http://www.w3.org/1999/xhtml" class="map-control"><label for="fat">Fatty acids <output id="fatOut" for="fat">0.35 mmol/L</output></label><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35" aria-describedby="fatHint"/><span id="fatHint" class="map-hint">NEFA substrate supply</span></div></foreignObject>
           <rect id="fatNode" class="node pulse" x="53" y="455" width="205" height="58" rx="12" fill="#fffdf8" stroke="#0e735a"/>
           <text x="155" y="481" text-anchor="middle" class="svg-label">Fatty acids</text><text x="155" y="499" text-anchor="middle" class="svg-small">substrate intake</text>
           <path id="betaFlow" class="flow pulse" d="M258 484 L347 484"/>
@@ -127,19 +151,23 @@
           <ellipse id="tcaNode" class="node pulse" cx="451" cy="374" rx="102" ry="45" fill="#fffdf8" stroke="#147d89"/>
           <text x="451" y="370" text-anchor="middle" class="svg-label">TCA cycle</text><text x="451" y="391" text-anchor="middle" class="svg-small">NADH + FADH₂</text>
           <path id="electronFlow" class="flow pulse" d="M553 374 L630 374"/>
+          <ellipse id="atpHalo" cx="755" cy="160" rx="91" ry="46"/>
           <path id="atpFlow" class="flow pulse" d="M755 257 L755 197"/>
           <ellipse id="atpNode" class="node pulse" cx="755" cy="160" rx="76" ry="32" fill="#fffdf8" stroke="#1f2bd4"/>
           <text id="atpLabel" x="755" y="166" text-anchor="middle" class="svg-label">ATP output</text>
           <rect id="etcNode" class="node pulse" x="644" y="257" width="222" height="230" rx="18" fill="#fffdf8" stroke="#3f6f9f"/>
           <text x="755" y="292" text-anchor="middle" class="svg-label">Electron transport chain</text>
           <text x="677" y="330" class="svg-small">NADH → I</text><text x="677" y="366" class="svg-small">FADH₂ / succinate → II</text><text x="677" y="402" class="svg-small">→ III → IV → O₂</text><text x="677" y="438" class="svg-small">H⁺ gradient drives ATP synthase</text>
+          <foreignObject x="644" y="62" width="222" height="38"><div xmlns="http://www.w3.org/1999/xhtml" class="map-control"><label for="oxygen">Tissue O₂ <output id="oxygenOut" for="oxygen">40 mmHg</output></label><input id="oxygen" type="range" min="0" max="60" step="1" value="40" aria-describedby="oxygenHint"/><span id="oxygenHint" class="map-hint">complex IV electron acceptor</span></div></foreignObject>
           <path id="oxygenFlow" class="flow pulse" d="M866 329 L912 329"/>
           <text x="882" y="305" class="svg-label">O₂</text><text x="880" y="350" class="svg-small">→ H₂O</text>
           <path id="rosFlow" class="flow-dashed pulse" d="M866 430 L872 430"/>
           <rect id="rosNode" class="node pulse" x="873" y="397" width="51" height="64" rx="10" fill="#fff6f4" stroke="#b8423e"/>
           <text x="898" y="425" text-anchor="middle" class="svg-label" fill="#b8423e">ROS</text><text x="898" y="444" text-anchor="middle" class="svg-small">damage</text>
+          <g id="rosSparks" aria-hidden="true"><circle class="ros-spark" cx="898" cy="385" r="3"/><circle class="ros-spark" cx="925" cy="393" r="2.5"/><circle class="ros-spark" cx="931" cy="427" r="3"/><circle class="ros-spark" cx="920" cy="464" r="2.5"/><circle class="ros-spark" cx="871" cy="468" r="3"/><circle class="ros-spark" cx="862" cy="414" r="2.5"/></g>
           <text x="875" y="479" class="svg-small">lipids · enzymes · DNA</text>
           <path id="succinateFlow" class="flow-dashed pulse" d="M755 536 L755 487"/>
+          <foreignObject x="644" y="493" width="222" height="38"><div xmlns="http://www.w3.org/1999/xhtml" class="map-control"><label for="succinate">Succinate <output id="succinateOut" for="succinate">1.0× baseline</output></label><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1" aria-describedby="succinateHint"/><span id="succinateHint" class="map-hint">complex II input</span></div></foreignObject>
           <rect id="succinateNode" class="node pulse" x="674" y="536" width="162" height="58" rx="12" fill="#fffdf8" stroke="#bd8a12"/>
           <text x="755" y="561" text-anchor="middle" class="svg-label">Succinate</text><text x="755" y="580" text-anchor="middle" class="svg-small">complex II input</text>
           <text x="43" y="630" class="svg-small">Teaching arithmetic: 1 glucose → 2 pyruvate; 46 H⁺ / oxidised pyruvate; 10 H⁺ / O₂; ~3 H⁺ / ATP. Outputs are conceptual pool units.</text>
@@ -147,15 +175,10 @@
     </section>
     <section class="panel controls" aria-labelledby="controls-title">
       <div class="controls-header">
-        <h2 id="controls-title">Set the cellular conditions</h2>
-        <p>Use a starting scenario or tune each input independently.</p>
+        <h2 id="controls-title">Choose a starting condition</h2>
+        <p>Then refine its inputs directly on the metabolic map.</p>
       </div>
       <div class="controls-grid">
-        <div class="control"><div class="label-line"><label for="glucose">Glucose</label><output id="glucoseOut" for="glucose">5.2 mmol/L</output></div><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2"><p class="hint">Blood glucose: typical fasting range ~3.9–5.5 mmol/L; diabetes diagnostic threshold ≥7.0 mmol/L fasting.</p></div>
-        <div class="control"><div class="label-line"><label for="fat">Non esterified fatty acids</label><output id="fatOut" for="fat">0.35 mmol/L</output></div><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35"><p class="hint">Circulating NEFA: commonly ~0.1–0.6 mmol/L, with higher values in fasting or insulin resistance.</p></div>
-        <div class="control"><div class="label-line"><label for="oxygen">Tissue oxygen tension</label><output id="oxygenOut" for="oxygen">40 mmHg</output></div><input id="oxygen" type="range" min="0" max="60" step="1" value="40"><p class="hint">A tissue pO₂ proxy: hypoxia may be &lt;10 mmHg; values vary substantially among tissues.</p></div>
-        <div class="control"><div class="label-line"><label for="lactate">Blood lactate</label><output id="lactateOut" for="lactate">1.0 mmol/L</output></div><input id="lactate" type="range" min="0" max="12" step="0.1" value="1"><p class="hint">Typical resting range ~0.5–2 mmol/L; &gt;4 mmol/L is clinically raised. In this model, every 1 mmol/L lactate change produces the same Δpyruvate input through LDH.</p></div>
-        <div class="control"><div class="label-line"><label for="succinate">Intracellular succinate</label><output id="succinateOut" for="succinate">1.0× baseline</output></div><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1"><p class="hint">Relative intracellular pool: 1× is baseline. Ischaemia can cause marked accumulation; it is not a plasma concentration.</p></div>
         <div class="scenarios"><strong>Starting scenarios</strong><div class="scenario-buttons"><button type="button" data-scenario="steady">Steady aerobic</button><button type="button" data-scenario="ischaemia">Ischaemia</button><button type="button" data-scenario="reperfusion">Early reperfusion</button><button type="button" data-scenario="diabetes">DKA teaching pattern</button></div></div>
       </div>
     </section>
@@ -270,6 +293,13 @@
       opacity('electronFlow', electronSupply); opacity('etcNode', electronThroughput + .16); bubble('etcNode', electronThroughput + .16); opacity('oxygenFlow', oxygen); opacity('rosFlow', ros); opacity('rosNode', ros); bubble('rosNode', ros); opacity('succinateNode', succinate); bubble('succinateNode', succinate); opacity('succinateFlow', succinate);
       opacity('atpFlow', effectiveAtp); opacity('atpNode', effectiveAtp); bubble('atpNode', effectiveAtp); document.getElementById('atpLabel').textContent = `${atpOutput.toFixed(0)} ATP eq.`;
       document.getElementById('etcNode').style.stroke = ros > .5 ? '#b8423e' : '#1f2bd4';
+      const map = document.querySelector('.diagram');
+      map.classList.toggle('atp-active', effectiveAtp > .05);
+      map.classList.toggle('ros-active', ros > .12);
+      map.style.setProperty('--atp-intensity', effectiveAtp.toFixed(2));
+      map.style.setProperty('--atp-speed', `${(2.8 - effectiveAtp * 1.5).toFixed(2)}s`);
+      map.style.setProperty('--ros-intensity', Math.max(.15, ros).toFixed(2));
+      map.style.setProperty('--ros-speed', `${(1.9 - ros * 1.1).toFixed(2)}s`);
     }
     const scenarios = {
       steady:{glucose:5.2,fat:.35,oxygen:40,lactate:1,succinate:1},
