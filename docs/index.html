@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive conceptual drylab for Stage 1 biomedical metabolism teaching.">
-  <title>Metabolism under pressure | Drylab</title>
+  <meta name="description" content="Interactive conceptual drylab for Stage 2 biomedical metabolism teaching.">
+  <title>Metabolism under pressure | Stage 2 drylab</title>
   <style>
     :root { --navy:#0c0c48; --royal:#1f2bd4; --blue:#00467f; --cyan:#00caef; --ink:#101633; --muted:#53617c; --paper:#f4f6fb; --card:#ffffff; --soft-blue:#edf3fb; --soft-cyan:#e8faff; --soft-amber:#fff8e8; --soft-red:#fff1f2; --line:#d7deeb; --red:#b4233a; --gold:#9d6b00; --shadow:0 18px 42px rgba(12,12,72,.10); }
     * { box-sizing:border-box; }
@@ -107,10 +107,10 @@
   <a class="skip" href="#simulator">Skip to simulator</a>
   <header>
     <div class="wrap">
-      <div class="eyebrow">Interactive drylab · Stage 1 biomedical science</div>
+      <div class="eyebrow">Interactive drylab · Stage 2 biomedical science</div>
       <h1>Metabolism under pressure.</h1>
       <p class="lede">Follow carbon and electrons from glucose and fatty acids to ATP. Change the conditions, make a prediction, then use the pathway map to explain what changes.</p>
-      <p class="notice"><strong>Important:</strong> this is a teaching model. It shows qualitative, directional relationships; it is not a quantitative simulation or a clinical prediction tool. <a href="./challenge.html" style="color:white;font-weight:800">Try the case challenge →</a></p>
+      <p class="notice"><strong>Stage 2 extension:</strong> this model introduces metabolic pathways and qualitative relationships. For the Stage 1 visual introduction, <a href="./stage1.html" style="color:white;font-weight:800">start with the Energy Journey →</a> · <a href="./challenge.html" style="color:white;font-weight:800">try the Stage 2 case challenge →</a></p>
     </div>
   </header>
   <main id="simulator" class="wrap">
@@ -211,7 +211,7 @@
       </details>
     </section>
   </main>
-  <footer><div class="wrap">Built as an open teaching demo. <a href="./challenge.html">Case challenge</a> · <a href="https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-biomedical-science.html">Stage 1 Biomedical Science context</a> · Qualitative educational model only.</div></footer>
+  <footer><div class="wrap">Built as an open teaching demo. <a href="./stage1.html">Stage 1 Energy Journey</a> · <a href="./challenge.html">Stage 2 case challenge</a> · <a href="https://www.auckland.ac.nz/en/study/study-options/find-a-study-option/bachelor-of-biomedical-science.html">Biomedical Science context</a> · Qualitative educational model only.</div></footer>
   <script>
     const ids = ['glucose','fat','oxygen','lactate','succinate'];
     const sliders = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
