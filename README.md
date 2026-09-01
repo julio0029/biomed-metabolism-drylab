@@ -1,13 +1,15 @@
 # Metabolism under pressure
 
-Two browser based drylab demos that scaffold early biomedical science teaching:
+Four browser based drylab pages scaffold early biomedical science teaching:
 
-- **Stage 1 — Energy Journey** (`docs/stage1.html`): a visual first encounter with food fuel, oxygen, mitochondria and ATP as reusable energy packets. It uses a glucose fuel parcel, pyruvate energy train and fatty acid worm instead of biochemical pathway detail.
-- **Stage 2 — Metabolism under pressure** (`docs/index.html`): links glycolysis, beta oxidation, the tricarboxylic acid (TCA) cycle and the mitochondrial electron transport chain, then lets students vary substrate availability, oxygen, lactate and succinate.
+1. **Fuel pathways** (`docs/stage1.html`) — carbohydrates, lipids and ketone bodies; the overall ideas of glycolysis, β oxidation and ketolysis.
+2. **TCA wheel** (`docs/tca.html`) — visual carbon entry, carbon dioxide release and NADH energy carriers.
+3. **Mitochondrial membrane** (`docs/mitochondria.html`) — complexes I to IV, NADH and succinate entry, oxygen, proton pumping and ATP synthase.
+4. **Integrated model** (`docs/index.html`) — Stage 2 extension linking the pathways with adjustable substrate, oxygen, lactate and succinate conditions.
 
 ## Teaching purpose
 
-The Stage 2 page is designed to prompt explanation and prediction: what happens to ATP production when oxygen falls, why lactate accumulates in hypoxia, and why succinate can contribute to reactive oxygen species during early reperfusion.
+The sequence supports explanation and prediction: how fuels converge on mitochondria, why carbon dioxide is released, how NADH and succinate feed the respiratory chain, what happens to ATP production when oxygen falls, and why succinate can contribute to reactive oxygen species during early reperfusion.
 
 It is deliberately a **conceptual, qualitative model**, not a clinical tool or a quantitative simulation of a cell, organ, or patient. The readouts show directional relationships derived from core lecture concepts. They should be discussed alongside the assumptions and limitations stated on the page.
 
