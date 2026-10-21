@@ -5,7 +5,11 @@ Four browser based drylab pages scaffold early biomedical science teaching:
 1. **Fuel pathways** (`docs/stage1.html`) — carbohydrates, lipids and ketone bodies; the overall ideas of glycolysis, β oxidation and ketolysis.
 2. **TCA wheel** (`docs/tca.html`) — visual carbon entry, carbon dioxide release and NADH energy carriers.
 3. **Mitochondrial membrane** (`docs/mitochondria.html`) — complexes I to IV, NADH and succinate entry, oxygen, proton pumping and ATP synthase.
-4. **Integrated model** (`docs/index.html`) — Stage 2 extension linking the pathways with adjustable substrate, oxygen, lactate and succinate conditions.
+4. **Integrated model** (`docs/index.html`) — Stage 1 dashboard linking the pathways with adjustable substrate, oxygen, lactate and succinate conditions.
+
+## Dashboard
+
+[Open the live Stage 1 dashboard](https://julio0029.github.io/biomed-metabolism-drylab/)
 
 ## Teaching purpose
 
@@ -17,7 +21,7 @@ It is deliberately a **conceptual, qualitative model**, not a clinical tool or a
 
 Open the published page and move the sliders, or use a starting scenario. Students can record a prediction before changing a variable, then explain the observed direction of change using the pathway diagram.
 
-The linked [Stage 2 case challenge](docs/challenge.html) asks students to calculate glucose from an absorbance standard curve, select the necessary metabolic assays, calculate the same modelled ATP output, and assign a teaching phenotype.
+The linked [case challenge](docs/challenge.html) asks students to calculate glucose from an absorbance standard curve, select the necessary metabolic assays, calculate the same modelled ATP output, and assign a teaching phenotype.
 
 ## Local preview
 

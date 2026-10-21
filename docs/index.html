@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive conceptual drylab for Stage 2 biomedical metabolism teaching.">
-  <title>Metabolism under pressure | Stage 2 drylab</title>
+  <meta name="description" content="Interactive conceptual drylab for Stage 1 biomedical metabolism teaching.">
+  <title>Metabolism under pressure | Stage 1 drylab</title>
   <style>
     :root { --navy:#0c0c48; --royal:#1f2bd4; --blue:#00467f; --cyan:#00caef; --ink:#101633; --muted:#53617c; --paper:#f4f6fb; --card:#ffffff; --soft-blue:#edf3fb; --soft-cyan:#e8faff; --soft-amber:#fff8e8; --soft-red:#fff1f2; --line:#d7deeb; --red:#b4233a; --gold:#9d6b00; --shadow:0 18px 42px rgba(12,12,72,.10); }
     * { box-sizing:border-box; }
@@ -23,6 +23,17 @@
     main { padding:clamp(1.25rem,3vw,2.5rem) 0 clamp(3rem,6vw,5.5rem); }
     .panel { background:var(--card); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); }
     .diagram { padding:clamp(.8rem,2vw,1.5rem); overflow:hidden; }
+    .map-shell { position:relative; min-width:950px; }
+    .map-control { position:absolute; z-index:2; display:flex; flex-direction:column; gap:2px; padding:4px 7px 3px; border:1px solid #c7d0f5; border-radius:9px; background:rgba(255,255,255,.94); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,sans-serif; box-shadow:0 3px 9px rgba(12,12,72,.09); }
+    .map-control label { display:flex; justify-content:space-between; align-items:center; gap:4px; font-size:clamp(9px,.75vw,12px); line-height:1.1; font-weight:800; }
+    .map-control output { font-size:clamp(8px,.68vw,10px); color:var(--royal); }
+    .map-control input[type=range] { width:100%; height:16px; min-height:0; margin:0; cursor:pointer; accent-color:var(--royal); }
+    .map-control .map-hint { color:var(--muted); font-size:clamp(7px,.6vw,9px); line-height:1; }
+    .map-control--glucose { left:5.58%; top:9.47%; width:21.58%; }
+    .map-control--lactate { left:5.58%; top:45.65%; width:21.58%; }
+    .map-control--fat { left:5.58%; top:62.90%; width:21.58%; }
+    .map-control--oxygen { left:67.79%; top:9.47%; width:23.37%; }
+    .map-control--succinate { left:67.79%; top:75.27%; width:23.37%; }
     .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding:.15rem .2rem 1rem; }
     .section-heading h2, .controls h2, .interpretation h2, .learn h2 { font-size:clamp(1.1rem,1.5vw,1.35rem); margin:0; letter-spacing:-.025em; }
     .section-heading p { margin:0; color:var(--muted); font-size:.88rem; }
@@ -102,18 +113,19 @@
   <a class="skip" href="#simulator">Skip to simulator</a>
   <header>
     <div class="wrap">
-      <div class="eyebrow">Interactive drylab · 4 of 4 · Stage 2 biomedical science</div>
+      <div class="eyebrow">Interactive drylab · 4 of 4 · Stage 1 biomedical science</div>
       <h1>Metabolism under pressure.</h1>
       <p class="lede">Follow carbon and electrons from glucose and fatty acids to ATP. Change the conditions, make a prediction, then use the pathway map to explain what changes.</p>
-      <p class="notice"><strong>Integrated model:</strong> bring the Stage 1 concepts together and then explore the detailed pathway relationships. Begin with <a href="./stage1.html" style="color:white;font-weight:800">1. fuel pathways</a> · <a href="./tca.html" style="color:white;font-weight:800">2. TCA wheel</a> · <a href="./mitochondria.html" style="color:white;font-weight:800">3. mitochondrial membrane</a> · <a href="./challenge.html" style="color:white;font-weight:800">Stage 2 case challenge →</a></p>
+      <p class="notice"><strong>Integrated model:</strong> bring the Stage 1 concepts together and then explore the detailed pathway relationships. Begin with <a href="./stage1.html" style="color:white;font-weight:800">1. fuel pathways</a> · <a href="./tca.html" style="color:white;font-weight:800">2. TCA wheel</a> · <a href="./mitochondria.html" style="color:white;font-weight:800">3. mitochondrial membrane</a> · <a href="./challenge.html" style="color:white;font-weight:800">case challenge →</a></p>
     </div>
   </header>
   <main id="simulator" class="wrap">
     <section class="panel diagram" aria-labelledby="map-title">
       <div class="section-heading">
         <h2 id="map-title">The connected metabolic map</h2>
-        <p>Use the native controls below, then follow each change through the pathway map.</p>
+        <p>Adjust each condition beside its pathway input.</p>
       </div>
+      <div class="map-shell">
         <svg viewBox="0 0 950 655" role="img" aria-labelledby="svgTitle svgDesc">
           <title id="svgTitle">Interactive map from glycolysis and beta oxidation into the TCA cycle and electron transport chain</title>
           <desc id="svgDesc">Glucose flows through glycolysis to pyruvate, which reversibly interconverts with lactate through lactate dehydrogenase. Fatty acids flow through beta oxidation to acetyl CoA. The TCA cycle produces NADH and FADH2 which feed the electron transport chain. Oxygen accepts electrons and ATP synthase produces ATP. Succinate feeds complex II. Electron leak can form reactive oxygen species which can damage metabolic machinery.</desc>
@@ -162,18 +174,19 @@
           <text x="755" y="561" text-anchor="middle" class="svg-label">Succinate</text><text x="755" y="580" text-anchor="middle" class="svg-small">complex II input</text>
           <text x="43" y="630" class="svg-small">Teaching arithmetic: 1 glucose → 2 pyruvate; 46 H⁺ / oxidised pyruvate; 10 H⁺ / O₂; ~3 H⁺ / ATP. Outputs are conceptual pool units.</text>
         </svg>
+        <div class="map-control map-control--glucose"><label for="glucose">Glucose <output id="glucoseOut" for="glucose">5.2 mmol/L</output></label><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2" aria-describedby="glucoseHint"><span id="glucoseHint" class="map-hint">substrate supply</span></div>
+        <div class="map-control map-control--lactate"><label for="lactate">Lactate <output id="lactateOut" for="lactate">1.0 mmol/L</output></label><input id="lactate" type="range" min="0" max="12" step="0.1" value="1" aria-describedby="lactateHint"><span id="lactateHint" class="map-hint">LDH-linked input</span></div>
+        <div class="map-control map-control--fat"><label for="fat">Fatty acids <output id="fatOut" for="fat">0.35 mmol/L</output></label><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35" aria-describedby="fatHint"><span id="fatHint" class="map-hint">NEFA substrate supply</span></div>
+        <div class="map-control map-control--oxygen"><label for="oxygen">Tissue O₂ <output id="oxygenOut" for="oxygen">40 mmHg</output></label><input id="oxygen" type="range" min="0" max="60" step="1" value="40" aria-describedby="oxygenHint"><span id="oxygenHint" class="map-hint">complex IV electron acceptor</span></div>
+        <div class="map-control map-control--succinate"><label for="succinate">Succinate <output id="succinateOut" for="succinate">1.0× baseline</output></label><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1" aria-describedby="succinateHint"><span id="succinateHint" class="map-hint">complex II input</span></div>
+      </div>
     </section>
     <section class="panel controls" aria-labelledby="controls-title">
       <div class="controls-header">
         <h2 id="controls-title">Choose a starting condition</h2>
-        <p>These native controls are reliable in WebKit and update the map immediately.</p>
+        <p>Choose a pattern, then refine its inputs on the pathway map.</p>
       </div>
       <div class="controls-grid">
-        <div class="control"><div class="label-line"><label for="glucose">Glucose</label><output id="glucoseOut" for="glucose">5.2 mmol/L</output></div><input id="glucose" type="range" min="2" max="20" step="0.1" value="5.2" aria-describedby="glucoseHint"><p id="glucoseHint" class="hint">Substrate supply.</p></div>
-        <div class="control"><div class="label-line"><label for="fat">Fatty acids</label><output id="fatOut" for="fat">0.35 mmol/L</output></div><input id="fat" type="range" min="0" max="1.5" step="0.01" value="0.35" aria-describedby="fatHint"><p id="fatHint" class="hint">NEFA substrate supply.</p></div>
-        <div class="control"><div class="label-line"><label for="oxygen">Tissue O₂</label><output id="oxygenOut" for="oxygen">40 mmHg</output></div><input id="oxygen" type="range" min="0" max="60" step="1" value="40" aria-describedby="oxygenHint"><p id="oxygenHint" class="hint">Complex IV electron acceptor.</p></div>
-        <div class="control"><div class="label-line"><label for="lactate">Lactate</label><output id="lactateOut" for="lactate">1.0 mmol/L</output></div><input id="lactate" type="range" min="0" max="12" step="0.1" value="1" aria-describedby="lactateHint"><p id="lactateHint" class="hint">LDH linked input.</p></div>
-        <div class="control"><div class="label-line"><label for="succinate">Succinate</label><output id="succinateOut" for="succinate">1.0× baseline</output></div><input id="succinate" type="range" min="0.2" max="8" step="0.1" value="1" aria-describedby="succinateHint"><p id="succinateHint" class="hint">Complex II input.</p></div>
         <div class="scenarios"><strong>Starting scenarios</strong><div class="scenario-buttons"><button type="button" data-scenario="steady">Steady aerobic</button><button type="button" data-scenario="ischaemia">Ischaemia</button><button type="button" data-scenario="reperfusion">Early reperfusion</button><button type="button" data-scenario="diabetes">DKA teaching pattern</button></div></div>
       </div>
     </section>
@@ -206,7 +219,7 @@
       </details>
     </section>
   </main>
-  <footer><div class="wrap">Built as an open teaching demo. <a href="./stage1.html">1. Fuel pathways</a> · <a href="./tca.html">2. TCA wheel</a> · <a href="./mitochondria.html">3. Mitochondrial membrane</a> · 4. Integrated model · <a href="./challenge.html">Stage 2 case challenge</a> · Qualitative educational model only.</div></footer>
+  <footer><div class="wrap">Built as an open teaching demo. <a href="./stage1.html">1. Fuel pathways</a> · <a href="./tca.html">2. TCA wheel</a> · <a href="./mitochondria.html">3. Mitochondrial membrane</a> · 4. Integrated model · <a href="./challenge.html">case challenge</a> · Qualitative educational model only.</div></footer>
   <script>
     const ids = ['glucose','fat','oxygen','lactate','succinate'];
     const sliders = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));

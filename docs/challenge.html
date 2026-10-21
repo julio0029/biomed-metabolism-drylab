@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Stage 2 biomedical metabolism drylab case challenge.">
+  <meta name="description" content="Stage 1 biomedical metabolism drylab case challenge.">
   <title>Metabolic case challenge | Drylab</title>
   <style>
     :root { --navy:#0c0c48; --royal:#1f2bd4; --blue:#00467f; --cyan:#00caef; --ink:#101633; --muted:#53617c; --paper:#f4f6fb; --card:#fff; --line:#d7deeb; --amber:#9d6b00; --red:#b4233a; --green:#16715f; --shadow:0 18px 42px rgba(12,12,72,.10); }
@@ -23,7 +23,7 @@
   </style>
 </head>
 <body>
-  <header><div class="wrap"><div class="eyebrow">Stage 2 interactive drylab · knowledge challenge</div><h1>Read the sample. Order the tests. Explain the phenotype.</h1><p class="lede">Use the same simplified bioenergetic arithmetic as the metabolic map. This is a learning exercise, not a diagnostic decision tool.</p></div></header>
+  <header><div class="wrap"><div class="eyebrow">Stage 1 interactive drylab · knowledge challenge</div><h1>Read the sample. Order the tests. Explain the phenotype.</h1><p class="lede">Use the same simplified bioenergetic arithmetic as the metabolic map. This is a learning exercise, not a diagnostic decision tool.</p></div></header>
   <main class="wrap">
     <section class="panel"><div class="topline"><div><h2>1. Choose a case</h2><p class="small">Each case uses a glucose assay, targeted tests and a metabolic phenotype.</p></div><div class="case-buttons"><button class="case-button active" data-case="reperfusion">Early reperfusion</button><button class="case-button" data-case="ischaemia">Ischaemia</button><button class="case-button" data-case="dka">DKA pattern</button></div></div>
       <div class="case-grid"><div class="case"><strong id="caseTitle">Case A · Early reperfusion</strong><p id="caseText">A patient has restoration of blood flow after a short period of ischaemia. The task is to identify why oxygen restoration can increase ATP but also increase ROS.</p><p class="small" id="caseHint">Begin with the glucose result, then order the tests you think are necessary to calculate oxidative output.</p></div><div><div class="equation">Glucose assay: absorbance = 0.100 × [glucose mmol/L] + 0.050</div><div class="patient"><label for="glucoseAnswer">Patient absorbance: <strong id="absorbance">0.750</strong><input id="glucoseAnswer" inputmode="decimal" placeholder="Calculate glucose (mmol/L)"></label><button id="checkGlucose" type="button">Check</button></div><div id="glucoseFeedback" class="feedback">Calculate glucose from the standard curve before moving on.</div></div></div>
@@ -41,7 +41,7 @@
 
     <section class="panel"><h2>4. Assign the phenotype</h2><div class="final-grid"><div><label for="phenotype">Most likely teaching phenotype<select id="phenotype"><option value="">Choose one</option><option value="reperfusion">Early reperfusion with succinate-driven ROS</option><option value="ischaemia">Ischaemia / hypoxia with glycolytic compensation</option><option value="dka">Diabetic ketoacidosis teaching pattern</option></select></label><button id="checkPhenotype" type="button" style="margin-top:.8rem">Check phenotype</button></div><div id="phenotypeFeedback" class="callout">Use the pattern of oxygen, lactate, succinate and substrate supply rather than glucose alone.</div></div></section>
   </main>
-  <footer><div class="wrap"><a href="./index.html">← Return to the Stage 2 metabolic map</a> · <a href="./stage1.html">Stage 1 Energy Journey</a> · Concepts and arithmetic are intentionally simplified for teaching.</div></footer>
+  <footer><div class="wrap"><a href="./index.html">← Return to the Stage 1 metabolic map</a> · <a href="./stage1.html">Stage 1 Energy Journey</a> · Concepts and arithmetic are intentionally simplified for teaching.</div></footer>
   <script>
     const cases = {
       reperfusion:{title:'Case A · Early reperfusion', text:'A patient has restoration of blood flow after a short period of ischaemia. The task is to identify why oxygen restoration can increase ATP but also increase ROS.', absorbance:.750, glucose:7, fat:.90, oxygen:40, lactate:4.5, succinate:6, phenotype:'reperfusion'},
