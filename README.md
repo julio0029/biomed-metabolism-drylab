@@ -1,11 +1,12 @@
 # Metabolism under pressure
 
-Four browser based drylab pages scaffold early biomedical science teaching:
+Five browser based drylab pages scaffold early biomedical science teaching:
 
 1. **Fuel pathways** (`docs/stage1.html`) — carbohydrates, lipids and ketone bodies; the overall ideas of glycolysis, β oxidation and ketolysis.
 2. **TCA wheel** (`docs/tca.html`) — visual carbon entry, carbon dioxide release and NADH energy carriers.
 3. **Mitochondrial membrane** (`docs/mitochondria.html`) — complexes I to IV, NADH and succinate entry, oxygen, proton pumping and ATP synthase.
 4. **Integrated model** (`docs/index.html`) — Stage 1 dashboard linking the pathways with adjustable substrate, oxygen, lactate and succinate conditions.
+5. **Cristae and supercomplex model** (`docs/cristae-supercomplexes.html`) — original animated folded inner membrane model with qualitative electron, proton, oxygen and ATP synthase flows; linked to structural context in JEB Figure 2 without reproducing it.
 
 ## Dashboard
 

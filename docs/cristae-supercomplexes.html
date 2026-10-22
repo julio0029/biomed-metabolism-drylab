@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cristae &amp; supercomplexes | Stage 1 drylab</title>
+  <style>
+    :root{--ink:#10243d;--navy:#08213a;--blue:#2b73b6;--cyan:#40c7d7;--gold:#ffb74e;--red:#ef6b65;--green:#57b98a;--mist:#eaf3f6;--muted:#5e7182;--flow:0.65;--pulse:1.15s}
+    *{box-sizing:border-box}body{margin:0;background:#f7fafb;color:var(--ink);font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1180px;margin:auto;padding:0 24px}header{background:linear-gradient(120deg,#08213a,#164d70);color:#fff;padding:58px 0 46px}.ey{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:#9bdfeb;font-weight:800}.lede{max-width:850px;font-size:1.1rem;color:#dcecf2}h1{font-size:clamp(2.2rem,6vw,4.5rem);line-height:1;margin:.2em 0}a{color:#08649b;font-weight:700}.header-link{color:#fff}.grid{display:grid;grid-template-columns:minmax(0,2.4fr) minmax(250px,1fr);gap:22px;margin:30px auto}.panel,.controls,.note{background:#fff;border:1px solid #dce7eb;border-radius:18px;box-shadow:0 8px 28px rgba(20,59,76,.07)}.panel{padding:16px}.controls,.note{padding:22px}.controls h2,.note h2{font-size:1.1rem;margin-top:0}.control{margin:0 0 20px}.control label{display:flex;justify-content:space-between;font-weight:800;font-size:.9rem}.control output{color:#08649b}.control input{width:100%;accent-color:#0b699b}.key{display:grid;grid-template-columns:16px 1fr;gap:8px;align-items:center;font-size:.88rem;margin:8px 0}.sw{width:16px;height:16px;border-radius:4px}.caption{margin:12px 4px 0;color:var(--muted);font-size:.9rem}.callout{border-left:5px solid var(--gold);background:#fff9ec;padding:14px 16px;border-radius:0 12px 12px 0;margin:0 0 26px}.citation{font-size:.88rem;color:var(--muted)}footer{padding:28px 0 45px;color:#617686;font-size:.9rem}
+    svg{width:100%;height:auto;display:block;border-radius:13px;background:linear-gradient(180deg,#e7f4f7 0 26%,#faf3e6 26% 100%)}.membrane{fill:none;stroke:#28526f;stroke-width:18;stroke-linecap:round;stroke-linejoin:round}.membrane-inner{fill:none;stroke:#87b9c7;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}.crest{fill:#f2e5c8;stroke:#28526f;stroke-width:12;stroke-linejoin:round}.label{font-family:Inter,Arial,sans-serif;font-size:16px;fill:#16344c;font-weight:800}.small{font-size:13px;font-weight:600;fill:#466173}.tiny{font-size:11px;font-weight:700;fill:#466173}.complex{filter:drop-shadow(0 4px 4px rgba(0,0,0,.14));transform-box:fill-box;transform-origin:center}.ci{fill:#2d78b9}.cii{fill:#8c67a8}.ciii{fill:#ef8062}.civ{fill:#4ba986}.atp{fill:#f3b743}.super-tag{fill:#fff;stroke:#bfd5dc;stroke-width:1.5}.q{fill:#f1c646;stroke:#a87100;stroke-width:2}.cytc{fill:#cf5261;stroke:#8f2738;stroke-width:2}.molecule{font:800 15px Inter,Arial,sans-serif;fill:#16344c}.water{fill:#74bceb;stroke:#2875ad;stroke-width:2}.oxygen{fill:#f39792;stroke:#ba4b50;stroke-width:2}.arrow{fill:none;stroke:#effcff;stroke-width:5;stroke-linecap:round;stroke-dasharray:1 18;animation:stream var(--pulse) linear infinite;opacity:var(--flow)}.electron{stroke:#fee78a;stroke-width:6;stroke-dasharray:2 18;animation:stream calc(var(--pulse)*.75) linear infinite;opacity:var(--flow)}.proton{fill:#ee615c;opacity:var(--flow);animation:drift var(--pulse) linear infinite}.proton.two{animation-delay:-.55s}.proton.three{animation-delay:-.9s}.active{animation:breathe calc(var(--pulse)*2) ease-in-out infinite;opacity:calc(.55 + var(--flow)*.45)}.atp-active{animation:spin calc(var(--pulse)*2.4) linear infinite;transform-box:fill-box;transform-origin:center;opacity:calc(.55 + var(--flow)*.45)}.water-out{animation:waterout calc(var(--pulse)*2) ease-in infinite;opacity:var(--flow)}@keyframes stream{to{stroke-dashoffset:-114}}@keyframes drift{0%{transform:translateY(0);opacity:0}20%,75%{opacity:var(--flow)}100%{transform:translateY(-58px);opacity:0}}@keyframes breathe{50%{transform:scale(1.04)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes waterout{0%{transform:translate(0,0);opacity:0}30%{opacity:var(--flow)}100%{transform:translate(62px,32px);opacity:0}}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}.wrap{padding:0 16px}header{padding:42px 0 34px}.panel{padding:8px}}
+    @media(prefers-reduced-motion:reduce){.arrow,.electron,.proton,.active,.atp-active,.water-out{animation:none}}
+  </style>
+</head>
+<body>
+  <header><div class="wrap"><div class="ey">Stage 1 biomedical science · optional structural model</div><h1>Cristae &amp; supercomplexes.</h1><p class="lede">An original, animated teaching schematic in which electron transfer and proton motive force operate along folded inner membrane cristae. It is designed to complement the flat pathway map, not replace molecular structural data.</p><p><a class="header-link" href="./mitochondria.html">← Return to the pathway map</a> &nbsp;·&nbsp; <a class="header-link" href="./index.html">Integrated dashboard →</a></p></div></header>
+  <main class="wrap">
+    <section class="grid">
+      <div class="panel">
+        <svg id="cristae-model" viewBox="0 0 1160 700" role="img" aria-labelledby="diagram-title diagram-desc">
+          <title id="diagram-title">Folded cristae with respiratory supercomplexes and ATP synthase</title><desc id="diagram-desc">An original teaching schematic of folded inner mitochondrial membrane. Complex I, III and IV form supercomplexes; complex II feeds the Q pool; ATP synthase returns protons from crista lumen to matrix.</desc>
+          <text x="36" y="38" class="label">Intermembrane space</text><text x="36" y="680" class="label">Matrix</text><text x="470" y="92" class="small">Crista lumen: proton enriched</text>
+          <path class="membrane" d="M50 150H1110M130 150V395Q130 505 250 505H330Q450 505 450 395V150M495 150V395Q495 505 615 505H695Q815 505 815 395V150M860 150V395Q860 505 980 505H1030Q1100 505 1100 435V150"/>
+          <path class="membrane-inner" d="M50 173H1100M153 151V391Q153 480 250 480H330Q427 480 427 391V151M518 151V391Q518 480 615 480H695Q792 480 792 391V151M883 151V391Q883 480 980 480H1026Q1077 480 1077 431V151"/>
+          <text x="220" y="535" class="tiny">folded crista</text><text x="590" y="535" class="tiny">folded crista</text><text x="954" y="535" class="tiny">folded crista</text>
+
+          <path class="electron" d="M148 286C215 260 288 260 358 286S490 312 556 286S692 260 760 286"/>
+          <path class="electron" d="M205 360C270 340 318 332 380 311"/>
+          <path class="electron" d="M772 286C814 280 842 273 883 286"/>
+
+          <g class="complex active"><rect class="ci" x="145" y="237" width="96" height="104" rx="18"/><text class="molecule" x="174" y="282">CI</text><text class="tiny" x="157" y="309" fill="white">NADH</text></g>
+          <g class="complex active"><rect class="cii" x="194" y="347" width="92" height="75" rx="16"/><text class="molecule" x="219" y="390">CII</text><text class="tiny" x="205" y="410" fill="white">FADH₂</text></g>
+          <g class="complex active"><rect class="ciii" x="365" y="237" width="96" height="104" rx="18"/><text class="molecule" x="390" y="282">CIII</text><text class="tiny" x="378" y="309" fill="white">bc₁</text></g>
+          <g class="complex active"><rect class="civ" x="518" y="237" width="98" height="104" rx="18"/><text class="molecule" x="544" y="282">CIV</text><text class="tiny" x="528" y="309" fill="white">O₂ → H₂O</text></g>
+          <g><rect class="super-tag" x="160" y="198" width="435" height="28" rx="14"/><text x="178" y="217" class="tiny">respirasome: CI + CIII₂ + CIV</text></g>
+          <g class="complex active"><rect class="ciii" x="700" y="237" width="86" height="104" rx="18"/><text class="molecule" x="719" y="282">CIII</text><text class="tiny" x="712" y="309" fill="white">bc₁</text></g>
+          <g class="complex active"><rect class="civ" x="875" y="237" width="90" height="104" rx="18"/><text class="molecule" x="898" y="282">CIV</text><text class="tiny" x="886" y="309" fill="white">O₂ → H₂O</text></g>
+          <g><rect class="super-tag" x="702" y="198" width="255" height="28" rx="14"/><text x="719" y="217" class="tiny">CIII₂ + CIV assembly</text></g>
+          <g><circle class="q" cx="312" cy="293" r="24"/><text class="tiny" x="294" y="298">Q/QH₂</text></g><g><circle class="q" cx="658" cy="293" r="24"/><text class="tiny" x="640" y="298">Q/QH₂</text></g><g><circle class="cytc" cx="654" cy="237" r="16"/><text class="tiny" x="645" y="241" fill="white">cyt c</text></g><g><circle class="cytc" cx="828" cy="281" r="16"/><text class="tiny" x="819" y="285" fill="white">cyt c</text></g>
+
+          <path class="arrow" d="M190 425V192"/><path class="arrow" d="M561 425V192"/><path class="arrow" d="M920 425V192"/>
+          <circle class="proton" cx="190" cy="420" r="10"/><circle class="proton two" cx="561" cy="420" r="10"/><circle class="proton three" cx="920" cy="420" r="10"/>
+          <text x="169" y="449" class="tiny">H⁺</text><text x="540" y="449" class="tiny">H⁺</text><text x="899" y="449" class="tiny">H⁺</text>
+          <path class="arrow" d="M412 330V190"/><path class="arrow" d="M742 330V190"/><text x="420" y="178" class="tiny">QH₂ releases H⁺ to lumen</text>
+
+          <g class="complex"><rect class="atp" x="1020" y="278" width="56" height="116" rx="20"/><circle class="atp-active" cx="1048" cy="338" r="18" fill="#ffe6a6"/><text class="tiny" x="1023" y="418">ATP synthase</text><text class="tiny" x="1028" y="434">H⁺ ↓ ATP</text></g>
+          <path class="arrow" d="M1048 183V455"/><circle class="proton two" cx="1048" cy="194" r="9"/><circle class="proton three" cx="1048" cy="248" r="9"/>
+          <text x="1048" y="474" text-anchor="middle" class="tiny">ADP + Pᵢ → ATP</text>
+
+          <g class="active"><circle class="oxygen" cx="555" cy="391" r="21"/><text class="molecule" x="544" y="396">O₂</text><path class="electron" d="M566 373L566 341"/><text x="507" y="423" class="tiny">reduction at CIV</text></g>
+          <g class="water-out"><circle class="water" cx="604" cy="411" r="19"/><text class="molecule" x="592" y="416">H₂O</text></g>
+          <g class="active"><circle class="oxygen" cx="916" cy="391" r="21"/><text class="molecule" x="905" y="396">O₂</text><path class="electron" d="M927 373L927 341"/></g><g class="water-out" style="animation-delay:-.7s"><circle class="water" cx="965" cy="411" r="19"/><text class="molecule" x="953" y="416">H₂O</text></g>
+          <g transform="translate(46 580)"><rect x="0" y="0" width="890" height="56" rx="12" fill="#fff" opacity=".86"/><text x="18" y="24" class="small">Electron entry: NADH → CI, FADH₂ / succinate → CII → shared Q pool → CIII → cytochrome c → CIV → O₂.</text><text x="18" y="46" class="small">Protons: CI and CIV translocate H⁺; CIII releases QH₂ derived H⁺ into the crista lumen; ATP synthase returns H⁺ to matrix.</text></g>
+        </svg>
+        <p class="caption">Activity is qualitative: the controls change the visible flow intensity and tempo, not a kinetic or stoichiometric prediction.</p>
+      </div>
+      <aside class="controls"><h2>Drive the model</h2><div class="control"><label for="nadh">NADH input <output id="nadh-out">60%</output></label><input id="nadh" type="range" min="0" max="100" value="60"></div><div class="control"><label for="fadh2">FADH₂ / succinate input <output id="fadh2-out">45%</output></label><input id="fadh2" type="range" min="0" max="100" value="45"></div><div class="control"><label for="oxygen">O₂ availability <output id="oxygen-out">70%</output></label><input id="oxygen" type="range" min="0" max="100" value="70"></div><h2>Reading the diagram</h2><div class="key"><span class="sw" style="background:#2d78b9"></span><span>Complex I and NADH entry</span></div><div class="key"><span class="sw" style="background:#8c67a8"></span><span>Complex II and FADH₂ / succinate entry</span></div><div class="key"><span class="sw" style="background:#f1c646"></span><span>Mobile Q pool</span></div><div class="key"><span class="sw" style="background:#ef6b65"></span><span>Complex III and cytochrome c</span></div><div class="key"><span class="sw" style="background:#4ba986"></span><span>Complex IV and oxygen reduction</span></div><div class="key"><span class="sw" style="background:#ef6b65;border-radius:50%"></span><span>Proton movement / lumen acidification</span></div></aside>
+    </section>
+    <section class="callout"><strong>Deliberately schematic.</strong> Mitochondrial cristae are three dimensional, dynamically remodelled membrane folds. Respiratory assemblies vary by tissue and state, and the spatial organisation shown here is an original teaching interpretation rather than a copy or a scale model.</section>
+    <section class="note"><h2>Reference and provenance</h2><p>This page is an <strong>original teaching graphic</strong> structurally inspired by the folded cristae and supercomplex context in the supplied JEB figure. The journal figure itself is not reproduced or used as a background here.</p><p class="citation">Structural reference: <a href="https://doi.org/10.1242/jeb.247432" target="_blank" rel="noopener noreferrer">Journal of Experimental Biology, 227, jeb247432 (Figure 2)</a>. See also the <a href="https://wiki.oroboros.at/index.php/Q-junction" target="_blank" rel="noopener noreferrer">OROBOROS Q junction</a> for the convergent Q pool concept.</p></section>
+  </main>
+  <footer><div class="wrap"><a href="./stage1.html">1. Fuel pathways</a> · <a href="./tca.html">2. TCA wheel</a> · <a href="./mitochondria.html">3. Mitochondrial membrane</a> · <a href="./index.html">4. Integrated model</a> · Cristae &amp; supercomplex model</div></footer>
+  <script>
+    const inputs=["nadh","fadh2","oxygen"].map(id=>document.getElementById(id));
+    const svg=document.getElementById("cristae-model");
+    function update(){
+      const [nadh,fadh2,oxygen]=inputs.map(input=>Number(input.value));
+      document.getElementById("nadh-out").value=`${nadh}%`;
+      document.getElementById("fadh2-out").value=`${fadh2}%`;
+      document.getElementById("oxygen-out").value=`${oxygen}%`;
+      const electron=(nadh+fadh2)/200, drive=electron*(oxygen/100);
+      svg.style.setProperty("--flow",Math.max(.08,drive).toFixed(2));
+      svg.style.setProperty("--pulse",`${(2.45-Math.min(1.75,drive*1.8)).toFixed(2)}s`);
+    }
+    inputs.forEach(input=>input.addEventListener("input",update)); update();
+  </script>
+</body>
+</html>
