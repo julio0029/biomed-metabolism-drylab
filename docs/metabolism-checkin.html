@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Five question metabolism knowledge check for Stage 1 biomedical science.">
+  <title>Metabolism check in | Drylab</title>
+  <style>
+    :root { --navy:#0c0c48; --royal:#1f2bd4; --cyan:#00caef; --ink:#101633; --muted:#53617c; --paper:#f4f6fb; --card:#fff; --line:#d7deeb; --green:#0f6a58; --red:#b4233a; --shadow:0 18px 42px rgba(12,12,72,.10); }
+    * { box-sizing:border-box; } body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--royal); text-underline-offset:.16em; } button:focus-visible { outline:3px solid var(--cyan); outline-offset:3px; }
+    header { background:var(--navy); color:white; border-bottom:6px solid var(--cyan); padding:clamp(2rem,5vw,4rem) 1.25rem; } .wrap { width:min(900px,calc(100% - 2.5rem)); margin:auto; }
+    .eyebrow { color:var(--cyan); text-transform:uppercase; letter-spacing:.1em; font-size:.75rem; font-weight:800; } h1 { font-size:clamp(2.3rem,5vw,4.5rem); line-height:.98; letter-spacing:-.06em; margin:.6rem 0 1rem; } .lede { max-width:720px; color:#e7eaff; margin:0; font-size:1.08rem; }
+    main { padding:clamp(1.25rem,3vw,2.5rem) 0 3rem; } .intro,.question,.summary { background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:clamp(1rem,2vw,1.4rem); margin-bottom:1rem; }
+    .intro { border-left:5px solid var(--cyan); } .question-number { color:var(--royal); font-size:.82rem; letter-spacing:.08em; font-weight:850; text-transform:uppercase; } h2 { font-size:clamp(1.15rem,2.5vw,1.45rem); line-height:1.25; margin:.35rem 0 1rem; }
+    .choices { display:flex; gap:.7rem; flex-wrap:wrap; } button { cursor:pointer; border:1px solid #abb8e8; border-radius:999px; padding:.62rem 1.15rem; background:white; color:var(--navy); font:inherit; font-weight:800; } button:hover { background:#f0f2ff; } button.selected { background:var(--royal); border-color:var(--royal); color:white; } .feedback { display:none; margin-top:1rem; padding:.75rem .9rem; border-radius:10px; } .feedback.show { display:block; } .feedback.correct { background:#e8f7f2; color:#0d5a4a; } .feedback.incorrect { background:#fff0f2; color:#861c31; }
+    .summary { text-align:center; } #score { font-size:1.25rem; font-weight:850; } .small { color:var(--muted); font-size:.9rem; } .reset { margin-top:.6rem; } footer { padding:0 0 2.5rem; color:var(--muted); font-size:.9rem; }
+  </style>
+</head>
+<body>
+  <header><div class="wrap"><div class="eyebrow">Stage 1 biomedical science · knowledge check</div><h1>Metabolism check in.</h1><p class="lede">Vote yes or no for each statement, then use the feedback to refine your reasoning.</p></div></header>
+  <main class="wrap">
+    <section class="intro"><strong>How this works</strong><p>Choose one response for every statement. Your answers are saved only in this browser so that you can return to the activity. This check in does not collect names or produce a shared class tally.</p></section>
+    <section id="questions" aria-label="Metabolism yes or no questions"></section>
+    <section class="summary" aria-live="polite"><div id="score">Answer all five questions to see your score.</div><p class="small">Use the explanations to identify the wording that makes each statement accurate or inaccurate.</p><button class="reset" id="reset" type="button">Reset my answers</button></section>
+  </main>
+  <footer><div class="wrap"><a href="./index.html">Return to the Stage 1 metabolic map</a> · <a href="./challenge.html">Open the metabolic case challenge</a></div></footer>
+  <script>
+    const questions = [
+      { statement:'Glycogenesis is the process that transforms glucose into pyruvate.', answer:'no', explanation:'No. Glycolysis transforms glucose into pyruvate. Glycogenesis stores glucose as glycogen.' },
+      { statement:'The TCA or Krebs cycle occurs in the cristae.', answer:'no', explanation:'No. The TCA cycle occurs in the mitochondrial matrix. The electron transport chain is in the inner mitochondrial membrane, including the cristae.' },
+      { statement:'Oxygen is oxidised into water by mitochondrial complex IV.', answer:'no', explanation:'No. Oxygen is reduced to water at complex IV because it accepts electrons and protons.' },
+      { statement:'Mitochondria create about 90% of the energy required by an aerobic cell.', answer:'no', explanation:'No. Mitochondria convert energy from nutrients into ATP. Energy cannot be created.' },
+      { statement:'C₆H₁₂O₆ + 6 O₂ → 6 CO₂ + 6 H₂O + about 34 ATP is a useful simplified representation of aerobic glucose metabolism.', answer:'yes', explanation:'Yes. It is a simplified teaching representation of aerobic glucose metabolism. The exact ATP yield depends on cell type, shuttle systems and assumptions.' }
+    ];
+    const storageKey = 'metabolism-checkin-v1';
+    const responses = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const container = document.getElementById('questions');
+    function save() { localStorage.setItem(storageKey, JSON.stringify(responses)); }
+    function render() {
+      container.innerHTML = '';
+      questions.forEach((question, index) => {
+        const chosen = responses[index];
+        const answered = Boolean(chosen);
+        const correct = chosen === question.answer;
+        const card = document.createElement('section'); card.className = 'question';
+        card.innerHTML = `<div class="question-number">Statement ${index + 1} of ${questions.length}</div><h2>${question.statement}</h2><div class="choices"><button type="button" data-index="${index}" data-answer="yes" class="${chosen === 'yes' ? 'selected' : ''}" aria-pressed="${chosen === 'yes'}">Yes</button><button type="button" data-index="${index}" data-answer="no" class="${chosen === 'no' ? 'selected' : ''}" aria-pressed="${chosen === 'no'}">No</button></div><div class="feedback ${answered ? 'show ' + (correct ? 'correct' : 'incorrect') : ''}"><strong>${correct ? 'Correct.' : 'Not quite.'}</strong> ${answered ? question.explanation : ''}</div>`;
+        container.appendChild(card);
+      });
+      document.querySelectorAll('[data-answer]').forEach(button => button.addEventListener('click', () => { responses[button.dataset.index] = button.dataset.answer; save(); render(); }));
+      const answered = Object.keys(responses).length;
+      const score = questions.reduce((total, question, index) => total + (responses[index] === question.answer ? 1 : 0), 0);
+      document.getElementById('score').textContent = answered < questions.length ? `${answered} of ${questions.length} answered.` : `Your score: ${score} of ${questions.length}.`;
+    }
+    document.getElementById('reset').addEventListener('click', () => { Object.keys(responses).forEach(key => delete responses[key]); localStorage.removeItem(storageKey); render(); });
+    render();
+  </script>
+</body>
+</html>
